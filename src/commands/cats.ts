@@ -1,6 +1,7 @@
 // List all of the categories in the export file
 
 import { Command, Flags } from '@oclif/core'
+import { Console } from 'console'
 import fs = require('fs')
 import path = require('path')
 
@@ -42,14 +43,43 @@ export default class Cats extends Command {
     console.log(`Input folder: "${inputFolder}"`)
     // does the input folder exist?
     if (fs.existsSync(inputFolder)) {
-      console.log(`Input folder "${inputFolder}" exists.`)
-
       const fileName = args.prefix + catFileRoot
-      const inputFile = inputFolder == '.' ? './' + fileName : path.join(inputFolder, fileName)
-
+      const inputFile = inputFolder == '.'
+        ? path.join('./', fileName)
+        : path.join('./', inputFolder, fileName)
       console.log(`Input file: "${inputFile}"`)
+      // does the input file exist?
+      if (fs.existsSync(inputFile)) {
+        // read the data from the file
+        const data = JSON.parse(fs.readFileSync(inputFile, 'utf8'))
+        for (var obj of data) {
+          // console.log(obj.type)
+          if (obj.type == 'table') {
+            console.log(`Database: ${obj.database}`)
+            console.log(`Table: ${obj.name}`)
+            const categories = obj.data
+            categories.sort(this.catSort)
+            console.log(`Categories: ${categories.length}`)
+            for (var category of categories) {
+              console.log(`${category.title}  (${category.id}, ${category.path})`)
+            }
+          }
+        }
+      } else {
+        console.log(`File: "${inputFile}" does not exist.`)
+      }
     } else {
-      console.log(`Input folder "${inputFolder}" does not exist.`)
+      console.log(`Input folder: "${inputFolder}" does not exist.`)
     }
+  }
+
+  catSort(a: any, b: any) {
+    if (a.title < b.title) {
+      return -1;
+    }
+    if (a.title > b.title) {
+      return 1;
+    }
+    return 0;
   }
 }
