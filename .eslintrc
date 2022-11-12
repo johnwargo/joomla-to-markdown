@@ -2,5 +2,13 @@
   "extends": [
     "oclif",
     "oclif-typescript"
-  ]
+  ],
+  "rules": {
+    "comma-dangle": [
+      "never"
+    ],
+    "object-curly-spacing": [
+      "always"
+    ],
+  }
 }
