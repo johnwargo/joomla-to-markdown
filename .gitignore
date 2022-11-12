@@ -1,0 +1,19 @@
+# Folders
+/.nyc_output
+/dist
+/lib
+/package-lock.json
+/tmp
+/yarn.lock
+/node_modules
+/input
+/output
+
+/.github
+
+# Files
+*-debug.log
+*-debug.log
+*-error.log
+*-error.log
+oclif.manifest.json
