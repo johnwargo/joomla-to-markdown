@@ -35,7 +35,8 @@ export default class Cats extends Command {
     }
 
     const prefix: string = args.prefix
-    // We got this far, so we have a prefix
-    console.log(`Prefix: ${prefix}`)
+    const inputFolder: string = args.folder
+    console.log(`Input folder: "${inputFolder}"`)
+    console.log(`File prefix: "${prefix}"`)
   }
 }
