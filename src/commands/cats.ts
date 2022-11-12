@@ -45,7 +45,7 @@ export default class Cats extends Command {
       console.log(`Input folder "${inputFolder}" exists.`)
 
       const fileName = args.prefix + catFileRoot
-      const inputFile = inputFolder == '.' ? fileName : path.join(inputFolder, fileName)
+      const inputFile = inputFolder == '.' ? './' + fileName : path.join(inputFolder, fileName)
 
       console.log(`Input file: "${inputFile}"`)
     } else {
