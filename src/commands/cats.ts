@@ -1,7 +1,8 @@
 // List all of the categories in the export file
 
 import { Command, Flags } from '@oclif/core'
-import { Console } from 'console'
+import {getArticles, getCategories} from '../utils'
+
 import fs = require('fs')
 import path = require('path')
 

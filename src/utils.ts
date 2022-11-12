@@ -11,8 +11,13 @@ type Article = {
 };
 
 
-function getCats(filePath: string[]): Category[] {
+function getCategories(filePath: string[]): Category[] {
   return []
 }
 
-exports(getCats)
+function getArticles(filePath: string[]): Article[] {
+  return []
+}
+
+
+exports(getArticles, getCategories)
