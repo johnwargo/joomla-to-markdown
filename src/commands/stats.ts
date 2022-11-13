@@ -6,9 +6,7 @@ var strings = new Strings()
 export default class Stats extends Command {
   static summary = 'Statistics'
   static description = 'List statistics for the export files.'
-  static examples = [
-    '<%= config.bin %> <%= command.id %> inputFolder j3TablePrefix',
-  ]
+  static examples = [strings.twoParamExample]
 
   static flags = {
     // debug: Flags.boolean({ char: 'd' }),    

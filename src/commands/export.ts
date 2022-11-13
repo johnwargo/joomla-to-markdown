@@ -7,9 +7,7 @@ var strings = new Strings()
 export default class Go extends Command {
   static summary = 'Export'
   static description = 'Export all of the articles as markdown files.'
-  static examples = [
-    '<%= config.bin %> <%= command.id %> inputFolder j3TablePrefix outputFolder',
-  ]
+  static examples = [strings.threeParamExample]
 
   static flags = {
     // debug: Flags.boolean({ char: 'd' }),    
