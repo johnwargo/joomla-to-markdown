@@ -19,36 +19,6 @@ export type Article = {
   body: string
 };
 
-// Category: {  
-//     "id": "2",
-//     "asset_id": "27",
-//     "parent_id": "18",
-//     "lft": "18",
-//     "rgt": "19",
-//     "level": "2",
-//     "path": "category-posts\/category-blackberry",
-//     "extension": "com_content",
-//     "title": "BlackBerry",
-//     "alias": "category-blackberry",
-//     "note": "",
-//     "description": "<p>Description of the category<\/p>",
-//     "published": "1",
-//     "checked_out": "0",
-//     "checked_out_time": "0000-00-00 00:00:00",
-//     "access": "1",
-//     "params": "{\"category_layout\":\"\",\"image\":\"\",\"image_alt\":\"\"}",
-//     "metadesc": "",
-//     "metakey": "",
-//     "metadata": "{\"author\":\"\",\"robots\":\"\"}",
-//     "created_user_id": "0",
-//     "created_time": "0000-00-00 00:00:00",
-//     "modified_user_id": "62",
-//     "modified_time": "2017-03-02 14:31:45",
-//     "hits": "0",
-//     "language": "*",
-//     "version": "1"
-//   },
-
 export function getCategories(inputFolder: string, prefix: string, debug: boolean = false): Category[] {
 
   var categories: Category[] = []
