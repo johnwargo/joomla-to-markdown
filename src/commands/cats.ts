@@ -1,7 +1,7 @@
 // List all of the categories in the export file
 
 import { Command, Flags } from '@oclif/core'
-import { Category, getArticles, getCategories } from '../utils'
+import { Category, getCategories } from '../utils'
 
 export default class Cats extends Command {
   static summary = 'Category List'
