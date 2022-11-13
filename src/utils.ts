@@ -48,11 +48,8 @@ export type Article = {
 //   },
 
 export function getCategories(inputFolder: string, prefix: string): Category[] {
-  // Initialize the Cateogry array
   var categories: Category[] = []
-
   console.log(`getCategories('${inputFolder}', '${prefix}')`)
-  
   // does the input folder exist?
   if (fs.existsSync(inputFolder)) {
     const fileName = prefix + catFileRoot
