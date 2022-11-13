@@ -1,6 +1,6 @@
 // List all of the articles in the export file
 
-import {Command, Flags} from '@oclif/core'
+import { Command, Flags } from '@oclif/core'
 import { Article, getArticles } from '../utils'
 import Strings from '../strings'
 var strings = new Strings()
@@ -8,28 +8,26 @@ var strings = new Strings()
 export default class Arts extends Command {
   static summary = 'Article List'
   static description = 'List all the articles in the export file.'
-  static examples = [
-    '<%= config.bin %> <%= command.id %> inputFolder j3TablePrefix',  
-  ]
+  static examples = [strings.twoParamExample]
 
   static flags = {
-     // debug: Flags.boolean({ char: 'd' }),    
+    // debug: Flags.boolean({ char: 'd' }),    
   }
 
   static args = [
     {
-      name: 'folder',
+      name: strings.sourceFolderParam,
       required: true,
-      description: strings.importFolderDescription,
-    {
-      name: 'prefix',
+      description: strings.sourceFolderDescription,
+    }, {
+      name: strings.prefixParam,
       required: true,
       description: strings.prefixDescription
     }
   ]
 
   public async run(): Promise<void> {
-    const {args, flags} = await this.parse(Arts)
+    const { args, flags } = await this.parse(Arts)
 
     // const debug: boolean = flags.debug
     // if (debug) {

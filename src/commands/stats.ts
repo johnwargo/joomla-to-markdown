@@ -16,11 +16,11 @@ export default class Stats extends Command {
 
   static args = [
     {
-      name: 'folder',
+      name: strings.sourceFolderParam,
       required: true,
-      description: strings.importFolderDescription,
-    {
-      name: 'prefix',
+      description: strings.sourceFolderDescription,
+    }, {
+      name: strings.prefixParam,
       required: true,
       description: strings.prefixDescription
     }

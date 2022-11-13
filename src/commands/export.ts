@@ -1,7 +1,8 @@
 // export the articles
 import { Command, Flags } from '@oclif/core'
-import { getSystemErrorMap } from 'util'
 import { Article, Category, getArticles, getCategories } from '../utils'
+import Strings from '../strings'
+var strings = new Strings()
 
 export default class Go extends Command {
   static summary = 'Export'
@@ -16,16 +17,14 @@ export default class Go extends Command {
 
   static args = [
     {
-      name: 'inputFolder',
+      name: strings.sourceFolderParam,
       required: true,
-      description: 'The folder location for the Joomla table export files; use . for current folder.'
-    },
-    {
-      name: 'prefix',
+      description: strings.sourceFolderDescription
+    }, {
+      name: strings.prefixParam,
       required: true,
-      description: 'Joomla table export file prefix.'
-    },
-    {
+      description: strings.prefixDescription
+    }, {
       name: 'outputFolder',
       required: true,
       description: 'The name of the folder to store the exported articles files (markdown format).'

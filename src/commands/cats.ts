@@ -9,10 +9,7 @@ var strings = new Strings()
 export default class Cats extends Command {
   static summary = 'Category List'
   static description = 'List all the categories in the export file.'
-  static examples = [
-    '<%= config.bin %> <%= command.id %> inputFolder j3TablePrefix',
-    // '<%= config.bin %> <%= command.id %> inputFolder j3TablePrefix -d',
-  ]
+  static examples = [strings.twoParamExample]
 
   static flags = {
     // flag with a value (-n, --name=VALUE)
@@ -23,11 +20,11 @@ export default class Cats extends Command {
 
   static args = [
     {
-      name: 'folder',
+      name: strings.sourceFolderParam,
       required: true,
-      description: strings.importFolderDescription,
-    {
-      name: 'prefix',
+      description: strings.sourceFolderDescription,
+    }, {
+      name: strings.prefixParam,
       required: true,
       description: strings.prefixDescription
     }
