@@ -4,10 +4,10 @@ import { getSystemErrorMap } from 'util'
 import { Article, Category, getArticles, getCategories } from '../utils'
 
 export default class Go extends Command {
-  static summary = 'Statistics'
-  static description = 'List statistics for the export files.'
+  static summary = 'Export'
+  static description = 'Export all of the articles as markdown files.'
   static examples = [
-    '<%= config.bin %> <%= command.id %> inputFolder j3TablePrefix',
+    '<%= config.bin %> <%= command.id %> inputFolder j3TablePrefix outputFolder',
   ]
 
   static flags = {
