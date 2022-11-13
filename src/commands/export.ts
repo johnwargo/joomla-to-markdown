@@ -18,7 +18,7 @@ export default class Go extends Command {
     {
       name: 'inputFolder',
       required: true,
-      description: 'The name of the folder where the Joomla table export files are stored (use . for current folder).'
+      description: 'The folder location for the Joomla table export files; use . for current folder.'
     },
     {
       name: 'prefix',

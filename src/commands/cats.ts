@@ -2,6 +2,9 @@
 
 import { Command, Flags } from '@oclif/core'
 import { Category, getCategories } from '../utils'
+import Strings from '../strings'
+var strings = new Strings()
+
 
 export default class Cats extends Command {
   static summary = 'Category List'
@@ -20,10 +23,14 @@ export default class Cats extends Command {
 
   static args = [
     {
-      name: 'folder', required: true,
-      description: 'The name of the folder where the Joomla table export files are stored (use . for current folder).'
-    },
-    { name: 'prefix', required: true, description: 'Joomla table export file prefix.' }
+      name: 'folder',
+      required: true,
+      description: strings.importFolderDescription,
+    {
+      name: 'prefix',
+      required: true,
+      description: strings.prefixDescription
+    }
   ]
 
   public async run(): Promise<void> {
