@@ -83,14 +83,14 @@ export function getCategories(inputFolder: string, prefix: string): Category[] {
   } else {
     console.log(`Input folder: "${inputFolder}" does not exist.`)
   }
-  return categories.sort(catSort)
+  return categories.sort(compareFunction)
 }
 
 export function getArticles(inputFolder: string, prefix: string): Article[] {
   return []
 }
 
-function catSort(a: any, b: any) {
+function compareFunction(a: any, b: any) {
   if (a.title < b.title) {
     return -1;
   }
