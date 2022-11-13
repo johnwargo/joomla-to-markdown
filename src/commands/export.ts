@@ -9,7 +9,7 @@ var strings = new Strings()
 
 export default class Go extends Command {
   static summary = 'Export'
-  static description = 'Export all of the articles as markdown files.'
+  static description = 'Export all articles as markdown files.'
   static examples = [strings.threeParamExample]
 
   static flags = {
@@ -34,6 +34,8 @@ export default class Go extends Command {
 
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(Go)
+
+    var EmptyCategory: Category = { name: 'Unknown', idx: 0, alias: 'unknown', path: 'unknown' };
 
     return new Promise((resolve, reject) => {
       // does the export folder exist? (it should, I don't want to have to worry about creating it)
@@ -66,15 +68,15 @@ export default class Go extends Command {
         console.log(`Articles: ${articles.length.toLocaleString("en-US")}\n`)
         for (var article of articles) {
           var category: Category = <Category>categories.find(c => c.idx === article.catIdx);
-          console.log(`Category: ${category.name}`);
-          await ExportArticle(article, category, outputFolder);
+          if (!category) category = EmptyCategory;
+          ExportArticle(article, category, outputFolder);
         }
       } else {
         console.log('No articles found.')
         reject('No articles found.');
         return;
       }
-
+      // we made it this far, so resolve the promise
       resolve();
     });
 
@@ -86,4 +88,5 @@ async function ExportArticle(article: Article, category: Category, outputFolder:
   // write the file
   // write the front matter
   // write the content
+  console.log(`ExportArticle('${article.name}', '${category.name}', '${outputFolder}')`);
 }
