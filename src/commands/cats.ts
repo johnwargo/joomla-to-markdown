@@ -21,12 +21,12 @@ export default class Cats extends Command {
   static args = [
     {
       name: strings.sourceFolderParam,
-      required: true,
       description: strings.sourceFolderDescription,
+      required: true
     }, {
       name: strings.prefixParam,
-      required: true,
-      description: strings.prefixDescription
+      description: strings.prefixDescription,
+      required: true
     }
   ]
 
@@ -38,7 +38,7 @@ export default class Cats extends Command {
     //   console.log('Debug mode enabled')
     // }
 
-    var categories: Category[] = getCategories(args.folder, args.prefix)
+    var categories: Category[] = getCategories(args[strings.sourceFolderParam], args[strings.prefixParam])
     if (categories.length > 0) {
       console.log(`Categories: ${categories.length}`)
       for (var category of categories) {

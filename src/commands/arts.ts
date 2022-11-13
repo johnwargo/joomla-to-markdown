@@ -17,12 +17,12 @@ export default class Arts extends Command {
   static args = [
     {
       name: strings.sourceFolderParam,
-      required: true,
       description: strings.sourceFolderDescription,
+      required: true
     }, {
       name: strings.prefixParam,
-      required: true,
-      description: strings.prefixDescription
+      description: strings.prefixDescription,
+      required: true
     }
   ]
 
@@ -34,7 +34,7 @@ export default class Arts extends Command {
     //   console.log('Debug mode enabled')
     // }
 
-    var articles: Article[] = getArticles(args.folder, args.prefix)
+    var articles: Article[] = getArticles(args[strings.sourceFolderParam], args[strings.prefixParam])
     if (articles.length > 0) {
       console.log(`Articles: ${articles.length}`)
       for (var article of articles) {

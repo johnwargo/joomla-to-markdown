@@ -18,30 +18,30 @@ export default class Go extends Command {
   static args = [
     {
       name: strings.sourceFolderParam,
-      required: true,
-      description: strings.sourceFolderDescription
+      description: strings.sourceFolderDescription,
+      required: true
     }, {
       name: strings.prefixParam,
-      required: true,
-      description: strings.prefixDescription
+      description: strings.prefixDescription,
+      required: true
     }, {
-      name: 'outputFolder',
-      required: true,
-      description: 'The name of the folder to store the exported articles files (markdown format).'
+      name: strings.outputFolderParam,
+      description: strings.outputFolderDescription,
+      required: true
     },
   ]
 
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(Go)
 
-    var categories: Category[] = getCategories(args.folder, args.prefix)
+    var categories: Category[] = getCategories(args[strings.sourceFolderParam], args[strings.prefixParam])
     if (categories.length > 0) {
       console.log(`Categories: ${categories.length.toLocaleString("en-US")}`)
     } else {
       console.log('No categories found.')
     }
 
-    var articles: Article[] = getArticles(args.folder, args.prefix)
+    var articles: Article[] = getArticles(args[strings.sourceFolderParam], args[strings.prefixParam])
     if (articles.length > 0) {
       console.log(`Articles: ${articles.length.toLocaleString("en-US")}`)
 
