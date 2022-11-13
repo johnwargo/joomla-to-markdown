@@ -1,6 +1,7 @@
 // List all of the categories in the export file
 
 import { Command, Flags } from '@oclif/core'
+// internal modules
 import { Category, getCategories } from '../utils'
 import Strings from '../strings'
 var strings = new Strings()
@@ -15,7 +16,7 @@ export default class Cats extends Command {
     // flag with a value (-n, --name=VALUE)
     // prefix: Flags.string({char: 'p', description: 'Export file prefix'}),
     // flag with no value (-f, --force)
-    // debug: Flags.boolean({ char: 'd' }),
+    // debug: Flags.boolean({ char: 'd' })
   }
 
   static args = [

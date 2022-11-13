@@ -1,4 +1,5 @@
 import { Command, Flags } from '@oclif/core'
+// internal modules
 import { Article, Category, getArticles, getCategories } from '../utils'
 import Strings from '../strings'
 var strings = new Strings()
@@ -9,7 +10,7 @@ export default class Stats extends Command {
   static examples = [strings.twoParamExample]
 
   static flags = {
-    // debug: Flags.boolean({ char: 'd' }),    
+    // debug: Flags.boolean({ char: 'd' })  
   }
 
   static args = [

@@ -1,6 +1,7 @@
 // List all of the articles in the export file
 
 import { Command, Flags } from '@oclif/core'
+// internal modules
 import { Article, getArticles } from '../utils'
 import Strings from '../strings'
 var strings = new Strings()
@@ -11,7 +12,7 @@ export default class Arts extends Command {
   static examples = [strings.twoParamExample]
 
   static flags = {
-    // debug: Flags.boolean({ char: 'd' }),    
+    // debug: Flags.boolean({ char: 'd' })   
   }
 
   static args = [

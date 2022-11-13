@@ -11,7 +11,7 @@ export default class Clear extends Command {
     // flag with a value (-n, --name=VALUE)
     // name: Flags.string({ char: 'n', description: 'name to print' }),
     // flag with no value (-f, --force)
-    // force: Flags.boolean({ char: 'f' }),
+    // force: Flags.boolean({ char: 'f' })
   }
 
   static args = [{
