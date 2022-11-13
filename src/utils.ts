@@ -5,16 +5,18 @@ const catFileRoot: string = "_categories.json"
 const artFileRoot: string = "_content.json"
 
 export type Category = {
+  idx: number;
   name: string;
   alias: string;
   path: string;
-  idx: number;
 };
 
 export type Article = {
-  name: string;
-  path: string;
   idx: number;
+  name: string;
+  alias: string;
+  created: string;
+  body: string
 };
 
 // Category: {  
@@ -87,7 +89,42 @@ export function getCategories(inputFolder: string, prefix: string): Category[] {
 }
 
 export function getArticles(inputFolder: string, prefix: string): Article[] {
-  return []
+  var articles: Article[] = []
+  console.log(`getArticles('${inputFolder}', '${prefix}')`)
+  // does the input folder exist?
+  if (fs.existsSync(inputFolder)) {
+    const fileName = prefix + artFileRoot
+    const inputFile = inputFolder == '.'
+      ? path.join('./', fileName)
+      : path.join('./', inputFolder, fileName)
+    console.log(`Input file: "${inputFile}"`)
+    // does the input file exist?
+    if (fs.existsSync(inputFile)) {
+      // read the data from the file
+      const data = JSON.parse(fs.readFileSync(inputFile, 'utf8'))
+      for (var obj of data) {
+        if (obj.type == 'table') {
+          console.log(`Database: ${obj.database}`)
+          console.log(`Table: ${obj.name}`)
+          const artsData = obj.data          
+          for (var article of artsData) {
+            articles.push({
+              name: article.title,
+              alias: article.alias,
+              created: article.created,
+              body: article.introtext,
+              idx: parseInt(article.id)
+            })
+          }
+        }
+      }
+    } else {
+      console.log(`File: "${inputFile}" does not exist.`)
+    }
+  } else {
+    console.log(`Input folder: "${inputFolder}" does not exist.`)
+  }
+  return articles
 }
 
 function compareFunction(a: any, b: any) {
