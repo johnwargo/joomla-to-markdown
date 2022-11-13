@@ -1,12 +1,7 @@
 // List all of the categories in the export file
 
 import { Command, Flags } from '@oclif/core'
-import {getArticles, getCategories} from '../utils'
-
-import fs = require('fs')
-import path = require('path')
-
-const catFileRoot: string = "_categories.json"
+import { Category, getArticles, getCategories } from '../utils'
 
 export default class Cats extends Command {
   static summary = 'Category List'
@@ -40,47 +35,15 @@ export default class Cats extends Command {
       console.log('Debug mode enabled')
     }
 
-    const inputFolder: string = args.folder
-    console.log(`Input folder: "${inputFolder}"`)
-    // does the input folder exist?
-    if (fs.existsSync(inputFolder)) {
-      const fileName = args.prefix + catFileRoot
-      const inputFile = inputFolder == '.'
-        ? path.join('./', fileName)
-        : path.join('./', inputFolder, fileName)
-      console.log(`Input file: "${inputFile}"`)
-      // does the input file exist?
-      if (fs.existsSync(inputFile)) {
-        // read the data from the file
-        const data = JSON.parse(fs.readFileSync(inputFile, 'utf8'))
-        for (var obj of data) {
-          // console.log(obj.type)
-          if (obj.type == 'table') {
-            console.log(`Database: ${obj.database}`)
-            console.log(`Table: ${obj.name}`)
-            const categories = obj.data
-            categories.sort(this.catSort)
-            console.log(`Categories: ${categories.length}`)
-            for (var category of categories) {
-              console.log(`${category.title}  (${category.id}, ${category.path})`)
-            }
-          }
-        }
-      } else {
-        console.log(`File: "${inputFile}" does not exist.`)
+    var categories: Category[] = getCategories(args.folder, args.prefix)
+    if (categories.length > 0) {
+      console.log(`Categories: ${categories.length}`)
+      for (var category of categories) {
+        console.log(`${category.name}  (${category.idx}, ${category.path})`)
       }
     } else {
-      console.log(`Input folder: "${inputFolder}" does not exist.`)
+      console.log('No categories found.')
     }
   }
 
-  catSort(a: any, b: any) {
-    if (a.title < b.title) {
-      return -1;
-    }
-    if (a.title > b.title) {
-      return 1;
-    }
-    return 0;
-  }
 }
