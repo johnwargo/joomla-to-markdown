@@ -13,6 +13,7 @@ export type Category = {
 
 export type Article = {
   idx: number;
+  catIdx: number;
   name: string;
   alias: string;
   created: string;
@@ -65,7 +66,7 @@ export function getArticles(inputFolder: string, prefix: string, debug: boolean 
 
   var articles: Article[] = []
 
-  if (debug)  console.log(`getArticles('${inputFolder}', '${prefix}')`)
+  if (debug) console.log(`getArticles('${inputFolder}', '${prefix}')`)
 
   // does the input folder exist?
   if (fs.existsSync(inputFolder)) {
@@ -73,7 +74,7 @@ export function getArticles(inputFolder: string, prefix: string, debug: boolean 
     const inputFile = inputFolder == '.'
       ? path.join('./', fileName)
       : path.join('./', inputFolder, fileName)
-      if (debug) console.log(`Input file: "${inputFile}"`)
+    if (debug) console.log(`Input file: "${inputFile}"`)
     // does the input file exist?
     if (fs.existsSync(inputFile)) {
       // read the data from the file
@@ -82,14 +83,15 @@ export function getArticles(inputFolder: string, prefix: string, debug: boolean 
         if (obj.type == 'table') {
           console.log(`Database: ${obj.database}`)
           console.log(`Table: ${obj.name}`)
-          const artsData = obj.data          
+          const artsData = obj.data
           for (var article of artsData) {
             articles.push({
+              idx: parseInt(article.id),
+              catIdx: parseInt(article.catid),
               name: article.title,
               alias: article.alias,
               created: article.created,
               body: article.introtext,
-              idx: parseInt(article.id)
             })
           }
         }

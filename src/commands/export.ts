@@ -39,7 +39,7 @@ export default class Go extends Command {
       // does the export folder exist? (it should, I don't want to have to worry about creating it)
       console.log('\nOutput Folder\n=============');
       const outputFolder = path.join('./', args[strings.outputFolderParam]);
-      console.log(`Folder: ${outputFolder}`);
+      console.log(`Folder: '${outputFolder}'`);
       if (fs.existsSync(outputFolder)) {
         console.log('Folder exists\n');
       } else {
@@ -64,7 +64,11 @@ export default class Go extends Command {
       var articles: Article[] = getArticles(args[strings.sourceFolderParam], args[strings.prefixParam])
       if (articles.length > 0) {
         console.log(`Articles: ${articles.length.toLocaleString("en-US")}\n`)
-
+        for (var article of articles) {
+          var category: Category = <Category>categories.find(c => c.idx === article.catIdx);
+          console.log(`Category: ${category.name}`);
+          await ExportArticle(article, category, outputFolder);
+        }
       } else {
         console.log('No articles found.')
         reject('No articles found.');
@@ -75,4 +79,11 @@ export default class Go extends Command {
     });
 
   }
+}
+
+async function ExportArticle(article: Article, category: Category, outputFolder: string) {
+  // create the folder if it doesn't exist
+  // write the file
+  // write the front matter
+  // write the content
 }
