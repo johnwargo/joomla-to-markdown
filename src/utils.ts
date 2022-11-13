@@ -49,16 +49,19 @@ export type Article = {
 //     "version": "1"
 //   },
 
-export function getCategories(inputFolder: string, prefix: string): Category[] {
+export function getCategories(inputFolder: string, prefix: string, debug: boolean = false): Category[] {
+
   var categories: Category[] = []
-  console.log(`getCategories('${inputFolder}', '${prefix}')`)
+
+  if (debug) console.log(`getCategories('${inputFolder}', '${prefix}')`)
+
   // does the input folder exist?
   if (fs.existsSync(inputFolder)) {
     const fileName = prefix + catFileRoot
     const inputFile = inputFolder == '.'
       ? path.join('./', fileName)
       : path.join('./', inputFolder, fileName)
-    console.log(`Input file: "${inputFile}"`)
+    if (debug) console.log(`Input file: "${inputFile}"`)
     // does the input file exist?
     if (fs.existsSync(inputFile)) {
       // read the data from the file
@@ -88,16 +91,19 @@ export function getCategories(inputFolder: string, prefix: string): Category[] {
   return categories.sort(compareFunction)
 }
 
-export function getArticles(inputFolder: string, prefix: string): Article[] {
+export function getArticles(inputFolder: string, prefix: string, debug: boolean = false): Article[] {
+
   var articles: Article[] = []
-  console.log(`getArticles('${inputFolder}', '${prefix}')`)
+
+  if (debug)  console.log(`getArticles('${inputFolder}', '${prefix}')`)
+
   // does the input folder exist?
   if (fs.existsSync(inputFolder)) {
     const fileName = prefix + artFileRoot
     const inputFile = inputFolder == '.'
       ? path.join('./', fileName)
       : path.join('./', inputFolder, fileName)
-    console.log(`Input file: "${inputFile}"`)
+      if (debug) console.log(`Input file: "${inputFile}"`)
     // does the input file exist?
     if (fs.existsSync(inputFile)) {
       // read the data from the file
