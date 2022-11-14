@@ -43,21 +43,20 @@ export default class Stats extends Command {
     }
 
     var statistics: Statistic[] = [];
-    var statistic: Statistic = { property: '', value: '' };
+    var countStr: string;
 
     this.log(`Source Folder Parameter: ${strings.sourceFolderParam}\n`);
 
     var categories: Category[] = getCategories(args[strings.sourceFolderParam], args[strings.prefixParam]);
-    statistic.property = 'Categories';
-    statistic.value = categories.length > 0 ? categories.length.toLocaleString("en-US") : noneStr;
-    statistics.push(statistic);
-    
-    var articles: Article[] = getArticles(args[strings.sourceFolderParam], args[strings.prefixParam]);
-    statistic.property = 'Articles';
-    statistic.value = articles.length > 0 ? articles.length.toLocaleString("en-US") : noneStr;      
-    statistics.push(statistic);
-
+    countStr = categories.length > 0 ? categories.length.toLocaleString("en-US") : noneStr;
+    statistics.push({ property: 'Categories', value: countStr });
     this.log();
+
+    var articles: Article[] = getArticles(args[strings.sourceFolderParam], args[strings.prefixParam]);
+    countStr = articles.length > 0 ? articles.length.toLocaleString("en-US") : noneStr;    
+    statistics.push({ property: 'Articles', value: countStr });
+    this.log();
+
     CliUx.ux.table(statistics, columns, {});
   }
 }
