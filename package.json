@@ -22,12 +22,14 @@
     "@oclif/plugin-plugins": "^2.1.6",
     "chalk": "^5.1.2",
     "fs-extra": "^10.1.0",
+    "inquirer": "^9.1.4",
     "turndown": "^7.1.1"
   },
   "devDependencies": {
     "@oclif/test": "^2.2.10",
     "@types/chai": "^4",
     "@types/fs-extra": "^9.0.13",
+    "@types/inquirer": "^9.0.3",
     "@types/mocha": "^9.0.0",
     "@types/node": "^16.18.3",
     "@types/turndown": "^5.0.1",
