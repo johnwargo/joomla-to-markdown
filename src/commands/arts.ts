@@ -12,9 +12,7 @@ export default class Arts extends Command {
   static aliases = ['a']
   static examples = [strings.twoParamExample]
 
-  static flags = {
-    // debug: Flags.boolean({ char: 'd' })   
-  }
+  static flags = { debug: Flags.boolean({ char: 'd' }) }
 
   static args = [
     {
@@ -43,13 +41,10 @@ export default class Arts extends Command {
       alias: { header: 'Alias' }
     }
 
-    var articles: Article[] = getArticles(args[strings.sourceFolderParam], args[strings.prefixParam])
+    var articles: Article[] = getArticles(args[strings.sourceFolderParam],
+      args[strings.prefixParam], flags.debug);
     if (articles.length > 0) {
-      this.log(`\n${articles.length} articles`)
-      // for (var article of articles) {
-      //   this.log(`${article.name}  (${article.idx}, ${article.alias})`)
-      // }
-      this.log()
+      this.log(`\n${articles.length} articles\n`)            
       CliUx.ux.table(articles, columns, {})
     } else {
       this.error('No articles found.')

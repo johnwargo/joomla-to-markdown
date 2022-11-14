@@ -17,9 +17,7 @@ export default class Stats extends Command {
   static aliases = ['s']
   static examples = [strings.twoParamExample]
 
-  static flags = {
-    // debug: Flags.boolean({ char: 'd' })  
-  }
+  static flags = { debug: Flags.boolean({ char: 'd' }) }
 
   static args = [
     {
@@ -47,13 +45,15 @@ export default class Stats extends Command {
 
     this.log(`Source Folder Parameter: ${strings.sourceFolderParam}\n`);
 
-    var categories: Category[] = getCategories(args[strings.sourceFolderParam], args[strings.prefixParam]);
+    var categories: Category[] = getCategories(args[strings.sourceFolderParam],
+      args[strings.prefixParam], flags.debug);
     countStr = categories.length > 0 ? categories.length.toLocaleString("en-US") : noneStr;
     statistics.push({ property: 'Categories', value: countStr });
     this.log();
 
-    var articles: Article[] = getArticles(args[strings.sourceFolderParam], args[strings.prefixParam]);
-    countStr = articles.length > 0 ? articles.length.toLocaleString("en-US") : noneStr;    
+    var articles: Article[] = getArticles(args[strings.sourceFolderParam],
+      args[strings.prefixParam], flags.debug);
+    countStr = articles.length > 0 ? articles.length.toLocaleString("en-US") : noneStr;
     statistics.push({ property: 'Articles', value: countStr });
     this.log();
 

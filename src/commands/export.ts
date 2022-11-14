@@ -13,9 +13,7 @@ export default class Go extends Command {
   static aliases = ['e']
   static examples = [strings.threeParamExample]
 
-  static flags = {
-    // debug: Flags.boolean({ char: 'd' })
-  }
+  static flags = { debug: Flags.boolean({ char: 'd' }) }
 
   static args = [
     {
@@ -51,7 +49,8 @@ export default class Go extends Command {
 
       // start by getting the categories
       console.log('Categories\n==========');
-      var categories: Category[] = getCategories(args[strings.sourceFolderParam], args[strings.prefixParam]);
+      var categories: Category[] = getCategories(args[strings.sourceFolderParam], 
+        args[strings.prefixParam], flags.debug);
       if (categories.length > 0) {
         this.log(`Categories: ${categories.length.toLocaleString("en-US")}\n`);
       } else {
@@ -60,7 +59,8 @@ export default class Go extends Command {
 
       // next get the articles
       console.log('Articles\n========');
-      var articles: Article[] = getArticles(args[strings.sourceFolderParam], args[strings.prefixParam])
+      var articles: Article[] = getArticles(args[strings.sourceFolderParam], 
+        args[strings.prefixParam], flags.debug);
       if (articles.length > 0) {
         this.log(`Articles: ${articles.length.toLocaleString("en-US")}\n`)
         for (var article of articles) {

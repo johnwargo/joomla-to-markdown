@@ -13,12 +13,7 @@ export default class Cats extends Command {
   static aliases = ['c']
   static examples = [strings.twoParamExample]
 
-  static flags = {
-    // flag with a value (-n, --name=VALUE)
-    // prefix: Flags.string({char: 'p', description: 'Export file prefix'}),
-    // flag with no value (-f, --force)
-    // debug: Flags.boolean({ char: 'd' })
-  }
+  static flags = { debug: Flags.boolean({ char: 'd' }) }
 
   static args = [
     {
@@ -35,11 +30,6 @@ export default class Cats extends Command {
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(Cats)
 
-    // const debug: boolean = flags.debug
-    // if (debug) {
-    //   console.log('Debug mode enabled')
-    // }
-
     // @ts-ignore
     const columns: CliUx.Table.Columns = {
       // where `.name` is a property of a data object
@@ -48,13 +38,10 @@ export default class Cats extends Command {
       path: { header: 'Path' }
     }
 
-    var categories: Category[] = getCategories(args[strings.sourceFolderParam], args[strings.prefixParam])
+    var categories: Category[] = getCategories(args[strings.sourceFolderParam],
+      args[strings.prefixParam], flags.debug);;
     if (categories.length > 0) {
-      this.log(`\n${categories.length} Categories`)
-      // for (var category of categories) {
-      //   this.log(`${category.name}  (${category.idx}, ${category.path})`)
-      // }
-      this.log()
+      this.log(`\n${categories.length} Categories\n`)
       CliUx.ux.table(categories, columns, {})
     } else {
       this.error('No categories found.')
