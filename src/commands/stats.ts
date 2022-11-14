@@ -1,9 +1,16 @@
-import { Command, Flags } from '@oclif/core'
+import { CliUx, Command, Flags } from '@oclif/core'
 // internal modules
 import { Article, Category, getArticles, getCategories } from '../utils'
 import Strings from '../strings'
-var strings = new Strings()
 
+type Statistic = {
+  property: string;
+  value: string;
+};
+
+const noneStr = 'None';
+
+var strings = new Strings()
 export default class Stats extends Command {
   static summary = 'Statistics'
   static description = 'List statistics for the export files.'
@@ -28,20 +35,29 @@ export default class Stats extends Command {
 
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(Stats)
-    this.log(`Source Folder Parameter: ${strings.sourceFolderParam}`)
-    this.log()
-    var categories: Category[] = getCategories(args[strings.sourceFolderParam], args[strings.prefixParam], true)
-    if (categories.length > 0) {
-      this.log(`Entries: ${categories.length.toLocaleString("en-US")}`)
-    } else {
-      this.error('No categories found.')
+
+    // @ts-ignore
+    const columns: CliUx.Table.Columns = {
+      property: { header: 'Property' },
+      value: { header: 'Count' }
     }
-    console.log()
-    var articles: Article[] = getArticles(args[strings.sourceFolderParam], args[strings.prefixParam], true)
-    if (articles.length > 0) {
-      this.log(`Entries: ${articles.length.toLocaleString("en-US")}`)
-    } else {
-      this.error('No articles found.')
-    }
+
+    var statistics: Statistic[] = [];
+    var statistic: Statistic = { property: '', value: '' };
+
+    this.log(`Source Folder Parameter: ${strings.sourceFolderParam}\n`);
+
+    var categories: Category[] = getCategories(args[strings.sourceFolderParam], args[strings.prefixParam]);
+    statistic.property = 'Categories';
+    statistic.value = categories.length > 0 ? categories.length.toLocaleString("en-US") : noneStr;
+    statistics.push(statistic);
+    
+    var articles: Article[] = getArticles(args[strings.sourceFolderParam], args[strings.prefixParam]);
+    statistic.property = 'Articles';
+    statistic.value = articles.length > 0 ? articles.length.toLocaleString("en-US") : noneStr;      
+    statistics.push(statistic);
+
+    this.log();
+    CliUx.ux.table(statistics, columns, {});
   }
 }

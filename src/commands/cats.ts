@@ -1,6 +1,6 @@
 // List all of the categories in the export file
 
-import { Command, Flags } from '@oclif/core'
+import { CliUx, Command, Flags } from '@oclif/core'
 // internal modules
 import { Category, getCategories } from '../utils'
 import Strings from '../strings'
@@ -40,12 +40,22 @@ export default class Cats extends Command {
     //   console.log('Debug mode enabled')
     // }
 
+    // @ts-ignore
+    const columns: CliUx.Table.Columns = {
+      // where `.name` is a property of a data object
+      idx: { header: 'Idx' },
+      name: { header: 'Category' },
+      path: { header: 'Path' }
+    }
+
     var categories: Category[] = getCategories(args[strings.sourceFolderParam], args[strings.prefixParam])
     if (categories.length > 0) {
-      this.log(`Categories: ${categories.length}`)
-      for (var category of categories) {
-        this.log(`${category.name}  (${category.idx}, ${category.path})`)
-      }
+      this.log(`\n${categories.length} Categories`)
+      // for (var category of categories) {
+      //   this.log(`${category.name}  (${category.idx}, ${category.path})`)
+      // }
+      this.log()
+      CliUx.ux.table(categories, columns, {})
     } else {
       this.error('No categories found.')
     }
