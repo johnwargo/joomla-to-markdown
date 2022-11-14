@@ -7,6 +7,7 @@ var strings = new Strings()
 export default class Stats extends Command {
   static summary = 'Statistics'
   static description = 'List statistics for the export files.'
+  static aliases = ['s']
   static examples = [strings.twoParamExample]
 
   static flags = {

@@ -10,6 +10,7 @@ var strings = new Strings()
 export default class Cats extends Command {
   static summary = 'Category List'
   static description = 'List all the categories in the export file.'
+  static aliases = ['c']
   static examples = [strings.twoParamExample]
 
   static flags = {

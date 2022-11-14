@@ -10,6 +10,7 @@ var strings = new Strings()
 export default class Go extends Command {
   static summary = 'Export'
   static description = 'Export all articles as markdown files.'
+  static aliases = ['e']
   static examples = [strings.threeParamExample]
 
   static flags = {

@@ -9,6 +9,7 @@ var strings = new Strings()
 export default class Arts extends Command {
   static summary = 'Article List'
   static description = 'List all the articles in the export file.'
+  static aliases = ['a']
   static examples = [strings.twoParamExample]
 
   static flags = {
