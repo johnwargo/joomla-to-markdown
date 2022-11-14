@@ -2,15 +2,23 @@
 import { Command, Flags } from '@oclif/core'
 import fs = require('fs')
 import path = require('path')
+import TurndownService = require('turndown')
+
 // internal modules
 import { Article, Category, getArticles, getCategories } from '../utils'
 import Strings from '../strings'
+import { build } from '@oclif/core/lib/parser'
+
+const crlf = '\r\n';
+
+// Create some objects we need to do our work
 var strings = new Strings()
+var turndownService = new TurndownService()
 
 export default class Go extends Command {
   static summary = 'Export'
   static description = 'Export all articles as markdown files.'
-  static aliases = ['e']
+  static aliases = ['e', 'x']
   static examples = [strings.threeParamExample]
 
   static flags = { debug: Flags.boolean({ char: 'd' }) }
@@ -78,10 +86,27 @@ export default class Go extends Command {
   }
 }
 
+function buildFileString(heading: string, text: string): string {
+  return `**${heading}:** ${text}${crlf}`;
+}
+
 async function ExportArticle(article: Article, category: Category, outputFolder: string) {
-  // create the folder if it doesn't exist
-  // write the file
-  // write the front matter
-  // write the content
   console.log(`ExportArticle('${article.name}', '${category.name}', '${outputFolder}')`);
+  // Calculate the file name
+  // var outputFileName = path.join(outputFolder, `${article.created}-${category.alias}-${article.alias}.md`);
+  var outputFileName = path.join(outputFolder, `${category.alias}-${article.alias}.md`);
+  console.log(`\nOutput File: '${outputFileName}'\n`);
+  var docBody = '';
+  docBody += buildFileString('Title', article.name);
+  docBody += buildFileString('idx', article.idx.toString());
+  docBody += buildFileString('Alias', article.alias);
+  docBody += buildFileString('Category', category.name);
+  docBody += buildFileString('catIdx', category.idx.toString());
+  docBody += buildFileString('Created', article.created);
+  docBody += crlf;
+  // convert the article body to markdown  
+  var markdownBody = turndownService.turndown(article.body);
+  docBody += markdownBody;
+  // write the body to the file
+  fs.writeFileSync(outputFileName, docBody, {});
 }
