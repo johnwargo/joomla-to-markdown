@@ -7,12 +7,7 @@ export default class Clear extends Command {
   static description = 'Delete all markdown files from the output folder.'
   static examples = [strings.oneParamExample]
 
-  static flags = {
-    // flag with a value (-n, --name=VALUE)
-    // name: Flags.string({ char: 'n', description: 'name to print' }),
-    // flag with no value (-f, --force)
-    // force: Flags.boolean({ char: 'f' })
-  }
+  static flags = { debug: Flags.boolean({ char: 'd' }) }
 
   static args = [{
     name: strings.outputFolderParam,
@@ -22,11 +17,6 @@ export default class Clear extends Command {
 
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(Clear)
-
-    const name = flags.name ?? 'world'
-    this.log(`hello ${name} from D:\\dev\\node\\joomla3-2-markdown\\src\\commands\\clear.ts`)
-    if (args.file && flags.force) {
-      this.log(`you input --force and --file: ${args.file}`)
-    }
+    
   }
 }

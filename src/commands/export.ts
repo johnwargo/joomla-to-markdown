@@ -49,7 +49,7 @@ export default class Go extends Command {
 
       // start by getting the categories
       console.log('Categories\n==========');
-      var categories: Category[] = getCategories(args[strings.sourceFolderParam], 
+      var categories: Category[] = getCategories(args[strings.sourceFolderParam],
         args[strings.prefixParam], flags.debug);
       if (categories.length > 0) {
         this.log(`Categories: ${categories.length.toLocaleString("en-US")}\n`);
@@ -59,7 +59,7 @@ export default class Go extends Command {
 
       // next get the articles
       console.log('Articles\n========');
-      var articles: Article[] = getArticles(args[strings.sourceFolderParam], 
+      var articles: Article[] = getArticles(args[strings.sourceFolderParam],
         args[strings.prefixParam], flags.debug);
       if (articles.length > 0) {
         this.log(`Articles: ${articles.length.toLocaleString("en-US")}\n`)
