@@ -1,13 +1,12 @@
 // export the articles
 import { Command, Flags } from '@oclif/core'
-import fs = require('fs')
-import path = require('path')
-import TurndownService = require('turndown')
+import fs = require('fs');
+import path = require('path');
+import TurndownService = require('turndown');
 
 // internal modules
 import { Article, Category, getArticles, getCategories } from '../utils'
 import Strings from '../strings'
-import { build } from '@oclif/core/lib/parser'
 
 const crlf = '\r\n';
 
