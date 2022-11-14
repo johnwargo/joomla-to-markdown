@@ -39,42 +39,36 @@ export default class Go extends Command {
 
     return new Promise((resolve, reject) => {
       // does the export folder exist? (it should, I don't want to have to worry about creating it)
-      console.log('\nOutput Folder\n=============');
+      this.log('\nOutput Folder\n=============');
       const outputFolder = path.join('./', args[strings.outputFolderParam]);
-      console.log(`Folder: '${outputFolder}'`);
+      this.log(`Folder: '${outputFolder}'`);
       if (fs.existsSync(outputFolder)) {
-        console.log('Folder exists\n');
+        this.log('Folder exists\n');
       } else {
-        console.log('Output folder does not exist, please create it and try again.');
-        reject('Output folder does not exist');
-        return;
+        this.error('Output folder does not exist, please create it and try again.');
       }
 
       // start by getting the categories
       console.log('Categories\n==========');
       var categories: Category[] = getCategories(args[strings.sourceFolderParam], args[strings.prefixParam]);
       if (categories.length > 0) {
-        console.log(`Categories: ${categories.length.toLocaleString("en-US")}\n`);
+        this.log(`Categories: ${categories.length.toLocaleString("en-US")}\n`);
       } else {
-        console.log('No categories found.');
-        reject('No categories found.');
-        return;
+        this.error('No categories found.');
       }
 
       // next get the articles
       console.log('Articles\n========');
       var articles: Article[] = getArticles(args[strings.sourceFolderParam], args[strings.prefixParam])
       if (articles.length > 0) {
-        console.log(`Articles: ${articles.length.toLocaleString("en-US")}\n`)
+        this.log(`Articles: ${articles.length.toLocaleString("en-US")}\n`)
         for (var article of articles) {
           var category: Category = <Category>categories.find(c => c.idx === article.catIdx);
           if (!category) category = EmptyCategory;
           ExportArticle(article, category, outputFolder);
         }
       } else {
-        console.log('No articles found.')
-        reject('No articles found.');
-        return;
+        this.error('No articles found.')
       }
       // we made it this far, so resolve the promise
       resolve();

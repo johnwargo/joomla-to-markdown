@@ -37,12 +37,12 @@ export default class Arts extends Command {
 
     var articles: Article[] = getArticles(args[strings.sourceFolderParam], args[strings.prefixParam])
     if (articles.length > 0) {
-      console.log(`Articles: ${articles.length}`)
+      this.log(`Articles: ${articles.length}`)
       for (var article of articles) {
-        console.log(`${article.name}  (${article.idx}, ${article.alias})`)
+        this.log(`${article.name}  (${article.idx}, ${article.alias})`)
       }
     } else {
-      console.log('No articles found.')
+      this.error('No articles found.')      
     }
   }
 }

@@ -41,12 +41,12 @@ export default class Cats extends Command {
 
     var categories: Category[] = getCategories(args[strings.sourceFolderParam], args[strings.prefixParam])
     if (categories.length > 0) {
-      console.log(`Categories: ${categories.length}`)
+      this.log(`Categories: ${categories.length}`)
       for (var category of categories) {
-        console.log(`${category.name}  (${category.idx}, ${category.path})`)
+        this.log(`${category.name}  (${category.idx}, ${category.path})`)
       }
     } else {
-      console.log('No categories found.')
+      this.error('No categories found.')
     }
   }
 
