@@ -47,20 +47,7 @@ export default class Clear extends Command {
         this.error('Output folder does not exist, please create it and try again.');
       }
 
-    //  console.dir(inquirer);
-
-      // // @ts-ignore
-      // let responses: any = await inquirer.prompt([{
-      //   name: 'delete',
-      //   message: 'Are you sure you want to delete all markdown files from the output folder?',
-      //   type: 'confirm',
-      //   default: false
-      // }]);
-      // console.log(responses.delete);
-      // // if (responses.delete) {
-      // //   this.log('Deleting files...');
-      // //   fs.emptyDirSync(outputFolder);
-      // // }
+      //   fs.emptyDirSync(outputFolder);    
     });
   }
 }
