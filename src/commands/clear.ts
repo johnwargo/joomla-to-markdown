@@ -33,6 +33,7 @@ export default class Clear extends Command {
       if (fs.existsSync(outputFolder)) {
         this.log('Folder exists\n');
 
+        // @ts-ignore
         let responses: any = await inquirer.prompt([{
           name: 'stage',
           message: 'select a stage',
