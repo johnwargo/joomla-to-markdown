@@ -1,7 +1,9 @@
 import { Command, Flags } from '@oclif/core'
 import fs = require('fs-extra');  // https://www.npmjs.com/package/fs-extra
 import path = require('path');
-import * as inquirer from 'inquirer'
+import * as inquirer from 'inquirer';
+// import inquirer from 'inquirer';
+// const inquirer = require('inquirer');
 
 // internal modules
 import Strings from '../strings'
@@ -34,17 +36,20 @@ export default class Clear extends Command {
         this.error('Output folder does not exist, please create it and try again.');
       }
 
-      let responses: any = await inquirer.prompt([{
-        name: 'delete',
-        message: 'Are you sure you want to delete all markdown files from the output folder?',
-        type: 'confirm',
-        default: false
-      }]);
-      console.log(responses.delete);
-      // if (responses.delete) {
-      //   this.log('Deleting files...');
-      //   fs.emptyDirSync(outputFolder);
-      // }
+     console.dir(inquirer);
+
+      // // @ts-ignore
+      // let responses: any = await inquirer.prompt([{
+      //   name: 'delete',
+      //   message: 'Are you sure you want to delete all markdown files from the output folder?',
+      //   type: 'confirm',
+      //   default: false
+      // }]);
+      // console.log(responses.delete);
+      // // if (responses.delete) {
+      // //   this.log('Deleting files...');
+      // //   fs.emptyDirSync(outputFolder);
+      // // }
     });
   }
 }
