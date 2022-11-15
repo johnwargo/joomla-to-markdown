@@ -8,4 +8,9 @@ Shields options once public: https://shields.io/
 <!-- [![Downloads/week](https://img.shields.io/npm/dw/oclif-hello-world.svg)](https://npmjs.org/package/oclif-hello-world)
 [![License](https://img.shields.io/npm/l/oclif-hello-world.svg)](https://github.com/johnwargo/joomla3-2-markdown/blob/main/package.json) -->
 
-Converts JSON Exported Joomla 3 article and category content to Markdown files
+The Joomla 3 to Markdown (j32md) module is a node.js command line utility for converting Joomla 3 article content into markdown files. 
+
+Export categories and content tables from your Joomla 3 site
+Run this utility and you'll get each article in a separate markdown file.
+
+
