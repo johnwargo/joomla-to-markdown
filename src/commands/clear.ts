@@ -32,11 +32,20 @@ export default class Clear extends Command {
       this.log(`Folder: '${outputFolder}'`);
       if (fs.existsSync(outputFolder)) {
         this.log('Folder exists\n');
+
+        let responses: any = await inquirer.prompt([{
+          name: 'stage',
+          message: 'select a stage',
+          type: 'list',
+          choices: [{name: 'development'}, {name: 'staging'}, {name: 'production'}],
+        }])
+        console.log(responses.stage);
+
       } else {
         this.error('Output folder does not exist, please create it and try again.');
       }
 
-     console.dir(inquirer);
+    //  console.dir(inquirer);
 
       // // @ts-ignore
       // let responses: any = await inquirer.prompt([{
