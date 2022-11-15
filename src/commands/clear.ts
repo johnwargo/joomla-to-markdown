@@ -1,9 +1,10 @@
 import { Command, Flags } from '@oclif/core'
 import fs = require('fs-extra');  // https://www.npmjs.com/package/fs-extra
 import path = require('path');
-import * as inquirer from 'inquirer';
+// import * as inquirer from 'inquirer';
 // import inquirer from 'inquirer';
 // const inquirer = require('inquirer');
+import inquirer = require('inquirer');
 
 // internal modules
 import Strings from '../strings'
