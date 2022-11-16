@@ -1,10 +1,7 @@
 import { Command, Flags } from '@oclif/core'
 import fs = require('fs-extra');  // https://www.npmjs.com/package/fs-extra
 import path = require('path');
-// import * as inquirer from 'inquirer';
-// import inquirer from 'inquirer';
-// const inquirer = require('inquirer');
-import inquirer = require('inquirer');
+const yesno = require('yesno');
 
 // internal modules
 import Strings from '../strings'
@@ -33,21 +30,22 @@ export default class Clear extends Command {
       this.log(`Folder: '${outputFolder}'`);
       if (fs.existsSync(outputFolder)) {
         this.log('Folder exists\n');
-
-        // @ts-ignore
-        let responses: any = await inquirer.prompt([{
-          name: 'stage',
-          message: 'select a stage',
-          type: 'list',
-          choices: [{name: 'development'}, {name: 'staging'}, {name: 'production'}],
-        }])
-        console.log(responses.stage);
-
+        // Make sure the user wants to delete the files
+        const confirmDelete = await yesno({
+          question: 'Delete all files from the output folder? Enter yes or no:',
+          defaultValue: false,
+          yesValues: ['Yes'],
+          noValues: ['No']
+        });
+        if (confirmDelete) {
+          this.log('Deleting files...');
+          fs.emptyDirSync(outputFolder);
+        } else {
+          this.log('Deletion cancelled');
+        }
       } else {
         this.error('Output folder does not exist, please create it and try again.');
       }
-
-      //   fs.emptyDirSync(outputFolder);    
     });
   }
 }
