@@ -43,8 +43,6 @@ export default class Stats extends Command {
     var statistics: Statistic[] = [];
     var countStr: string;
 
-    this.log(`Source Folder Parameter: ${strings.sourceFolderParam}\n`);
-
     var categories: Category[] = getCategories(args[strings.sourceFolderParam],
       args[strings.prefixParam], flags.debug);
     countStr = categories.length > 0 ? categories.length.toLocaleString("en-US") : noneStr;

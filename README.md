@@ -14,3 +14,40 @@ Export categories and content tables from your Joomla 3 site
 Run this utility and you'll get each article in a separate markdown file.
 
 
+## Commands
+
+### Articles
+
+
+### Categories
+
+
+### Clear
+
+
+### Export
+
+
+### Statistics
+
+command
+
+``` shell
+j32md stats input e4hy6
+```
+
+results
+
+``` text
+Database: my_cms
+Table: e4hy3_categories
+
+Database: my_cms
+Table: e4hy3_content
+
+ Property   Count 
+ ────────── ───── 
+ Categories 35
+ Articles   515
+```
+
