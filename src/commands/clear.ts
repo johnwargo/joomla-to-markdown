@@ -10,7 +10,8 @@ var strings = new Strings()
 export default class Clear extends Command {
   static summary = 'Clear'
   static description = 'Delete all markdown files from the output folder.'
-  static examples = [strings.oneParamExample]
+  static aliases = ['x'];
+  static examples = [strings.oneParamExample];
 
   static flags = { debug: Flags.boolean({ char: 'd' }) }
 
