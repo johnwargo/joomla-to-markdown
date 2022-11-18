@@ -72,7 +72,7 @@ export default class Go extends Command {
       if (articles.length > 0) {
         this.log(`Articles: ${articles.length.toLocaleString("en-US")}\n`)
         for (var article of articles) {
-          var category: Category = <Category>categories.find(c => c.idx === article.catIdx);
+          var category: Category = <Category>categories.find(c => c.id === article.catid);
           if (!category) category = EmptyCategory;
           ExportArticle(article, category, outputFolder);
         }
