@@ -117,12 +117,20 @@ function imagePreprocesser(content: string): string {
   // var tmp = inner.replace(/<img .*?>/g,"REPLACED"); 
   // const sources = html.match(/<img [^>]*src="[^"]*"[^>]*>/gm)
 
+  var tmpContent: string;
+
+  do {} while 
+
+
   // Loop through the content file loooking for image tags
 
   var imageURL = '';
   var imageAlt = '';
 
   return `![imageAlt](imageUrl)`;
+
+
+  return 
   
 }
 
