@@ -38,8 +38,8 @@ export default class Arts extends Command {
 
     // @ts-ignore
     const columns: CliUx.Table.Columns = {
-      idx: { header: 'Idx' },
-      name: { header: 'Title' },
+      id: { header: 'Id' },
+      title: { header: 'Title' },
       alias: { header: 'Alias' }
     }
 

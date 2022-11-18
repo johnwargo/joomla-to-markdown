@@ -91,21 +91,21 @@ function buildFileString(heading: string, text: string): string {
 }
 
 async function ExportArticle(article: Article, category: Category, outputFolder: string) {
-  console.log(`ExportArticle('${article.name}', '${category.name}', '${outputFolder}')`);
+  console.log(`ExportArticle('${article.title}', '${category.title}', '${outputFolder}')`);
   // Calculate the file name
   // var outputFileName = path.join(outputFolder, `${article.created}-${category.alias}-${article.alias}.md`);
   var outputFileName = path.join(outputFolder, `${category.alias}-${article.alias}.md`);
   console.log(`\nOutput File: '${outputFileName}'\n`);
   var docBody = '';
-  docBody += buildFileString('Title', article.name);
-  docBody += buildFileString('idx', article.idx.toString());
+  docBody += buildFileString('Title', article.title);
+  docBody += buildFileString('ID', article.id.toString());
   docBody += buildFileString('Alias', article.alias);
-  docBody += buildFileString('Category', category.name);
-  docBody += buildFileString('catIdx', category.idx.toString());
+  docBody += buildFileString('Category', category.title);
+  docBody += buildFileString('catIdx', category.id.toString());
   docBody += buildFileString('Created', article.created);
   docBody += crlf;
   // convert the article body to markdown  
-  var markdownBody = turndownService.turndown(article.body);
+  var markdownBody = turndownService.turndown(article.introtext);
   docBody += markdownBody;
   // write the body to the file
   fs.writeFileSync(outputFileName, docBody, {});
