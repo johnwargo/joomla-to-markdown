@@ -2,8 +2,10 @@
 
 import { CliUx, Command, Flags } from '@oclif/core'
 // internal modules
-import { Article, getArticles } from '../utils'
-import Strings from '../strings'
+import Strings from '../strings';
+import { Article } from '../types';
+import { getArticles } from '../utils';
+
 var strings = new Strings()
 
 export default class Arts extends Command {
@@ -44,7 +46,7 @@ export default class Arts extends Command {
     var articles: Article[] = getArticles(args[strings.sourceFolderParam],
       args[strings.prefixParam], flags.debug);
     if (articles.length > 0) {
-      this.log(`\n${articles.length} articles\n`)            
+      this.log(`\n${articles.length} articles\n`)
       CliUx.ux.table(articles, columns, {})
     } else {
       this.error('No articles found.')

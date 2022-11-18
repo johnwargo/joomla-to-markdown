@@ -5,7 +5,8 @@ import path = require('path');
 import TurndownService = require('turndown');
 
 // internal modules
-import { Article, Category, getArticles, getCategories } from '../utils'
+import { getArticles, getCategories } from '../utils'
+import { Article, Category  } from '../types';
 import Strings from '../strings'
 
 const crlf = '\r\n';

@@ -1,6 +1,7 @@
 import { CliUx, Command, Flags } from '@oclif/core'
 // internal modules
-import { Article, Category, getArticles, getCategories } from '../utils'
+import { getArticles, getCategories } from '../utils'
+import { Article, Category } from '../types';
 import Strings from '../strings'
 
 type Statistic = {

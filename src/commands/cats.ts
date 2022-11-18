@@ -2,10 +2,10 @@
 
 import { CliUx, Command, Flags } from '@oclif/core'
 // internal modules
-import { Category, getCategories } from '../utils'
-import Strings from '../strings'
+import Strings from '../strings';
+import {Category } from '../types';
+import { getCategories } from '../utils'
 var strings = new Strings()
-
 
 export default class Cats extends Command {
   static summary = 'Category List'

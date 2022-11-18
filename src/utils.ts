@@ -1,24 +1,9 @@
-import fs = require('fs')
-import path = require('path')
+import fs = require('fs');
+import path = require('path');
+import { Article, Category } from './types';
 
 const catFileRoot: string = "_categories.json"
 const artFileRoot: string = "_content.json"
-
-export type Category = {
-  idx: number;
-  name: string;
-  alias: string;
-  path: string;
-};
-
-export type Article = {
-  idx: number;
-  catIdx: number;
-  name: string;
-  alias: string;
-  created: string;
-  body: string
-};
 
 export function getCategories(inputFolder: string, prefix: string, debug: boolean = false): Category[] {
 
