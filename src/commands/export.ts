@@ -1,8 +1,17 @@
+/* 
+  Export module
+
+  Using a template, exports all of the Joomla article content into 
+  separate markdown files in the output folder
+
+*/
+
 // export the articles
 import { Command, Flags } from '@oclif/core'
 import fs = require('fs');
 import path = require('path');
-import TurndownService = require('turndown');
+import Turndown = require('turndown');
+var parseJSON = require('date-fns/parseJSON')
 
 // internal modules
 import { getArticles, getCategories } from '../utils'
@@ -13,7 +22,7 @@ const crlf = '\r\n';
 
 // Create some objects we need to do our work
 var strings = new Strings()
-var turndownService = new TurndownService()
+var turndown = new Turndown()
 
 export default class Go extends Command {
   static summary = 'Export'
@@ -88,27 +97,57 @@ export default class Go extends Command {
   }
 }
 
-function buildFileString(heading: string, text: string): string {
-  return `**${heading.trim()}:** ${text}${crlf}`;
+function zeroPad(tmpVal: string): string {
+  return tmpVal.toString().padStart(2, '0');
+}
+
+function buildJekyllFileName(title: string, articleDate: string): string {
+  // replace spaces with dashes
+  var tempTitle = title.trim().toLowerCase().replace(/\s+/g, '-');
+  // convert the date string into a Date/Time object
+  var tempDate = parseJSON(articleDate);
+  // build the file name
+  return `${tempDate.getFullYear()}-${zeroPad(tempDate.getMonth() + 1)}-${zeroPad(tempDate.getDate())}-${tempTitle}.md`;
+}
+
+function imagePreprocesser(content: string): string {
+  // Loop through the content file loooking for image tags
+
+  var imageURL = '';
+  var imageAlt = '';
+
+  return `![imageAlt](imageUrl)`;
+  
 }
 
 async function ExportArticle(article: Article, outputFolder: string) {
+  
   console.log(`ExportArticle('${article.title}', '${outputFolder}')`);
   // Calculate the file name
-  // var outputFileName = path.join(outputFolder, `${article.created}-${category.alias}-${article.alias}.md`);
-  var outputFileName = path.join(outputFolder, `${article.categoryAlias}-${article.alias}.md`);
-  console.log(`\nOutput File: '${outputFileName}'\n`);
-  var docBody = '';
-  docBody += buildFileString('Title', article.title);
-  docBody += buildFileString('ID', article.id.toString());
-  docBody += buildFileString('Alias', article.alias);
-  docBody += buildFileString('Category', article.categoryTitle!);
-  docBody += buildFileString('Category ID', article.catid);
-  docBody += buildFileString('Created', article.created);
-  docBody += crlf;
-  // convert the article body to markdown  
-  var markdownBody = turndownService.turndown(article.introtext);
-  docBody += markdownBody;
-  // write the body to the file
-  fs.writeFileSync(outputFileName, docBody, {});
+  var outputFileName = path.join(outputFolder, buildJekyllFileName(article.title, article.created));
+  console.log(outputFileName);
+
 }
+
+// async function writeArticle(article: Article, outputFolder: string) {
+//   function buildFileString(heading: string, text: string): string {
+//     return `**${heading.trim()}:** ${text}${crlf}`;
+//   }
+
+//   console.log(`ExportArticle('${article.title}', '${outputFolder}')`);
+//   var outputFileName = path.join(outputFolder, `${article.categoryAlias}-${article.alias}.md`);
+//   console.log(`\nOutput File: '${outputFileName}'\n`);
+//   var docBody = '';
+//   docBody += buildFileString('Title', article.title);
+//   docBody += buildFileString('ID', article.id.toString());
+//   docBody += buildFileString('Alias', article.alias);
+//   docBody += buildFileString('Category', article.categoryTitle!);
+//   docBody += buildFileString('Category ID', article.catid);
+//   docBody += buildFileString('Created', article.created);
+//   docBody += crlf;
+//   // convert the article body to markdown  
+//   var markdownBody = turndownService.turndown(article.introtext);
+//   docBody += markdownBody;
+//   // write the body to the file
+//   fs.writeFileSync(outputFileName, docBody, {});
+// }
