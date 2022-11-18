@@ -111,6 +111,12 @@ function buildJekyllFileName(title: string, articleDate: string): string {
 }
 
 function imagePreprocesser(content: string): string {
+  // https://www.rapiddg.com/article/regex-corner-extract-image-tags-html
+  // <img[^>]*src="([^"]+)"[^>]*>
+  // https://stackoverflow.com/questions/32046081/js-regex-to-remove-img-tag-from-string
+  // var tmp = inner.replace(/<img .*?>/g,"REPLACED"); 
+  // const sources = html.match(/<img [^>]*src="[^"]*"[^>]*>/gm)
+
   // Loop through the content file loooking for image tags
 
   var imageURL = '';
