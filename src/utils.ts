@@ -24,18 +24,11 @@ export function getCategories(inputFolder: string, prefix: string, debug: boolea
       const data = JSON.parse(fs.readFileSync(inputFile, 'utf8'))
       for (var obj of data) {
         if (obj.type == 'table') {
-          console.log(`Database: ${obj.database}`)
-          console.log(`Table: ${obj.name}`)
-          const catsData = obj.data
-          // Biuild the category array with just the data we need
-          for (var category of catsData) {
-            categories.push({
-              name: category.title,
-              alias: category.alias,
-              path: category.path,
-              idx: parseInt(category.id)
-            })
-          }
+          console.log(`Database: ${obj.database}`);
+          console.log(`Table: ${obj.name}`);
+          categories = obj.data;
+          // const catsData = obj.data
+          // for (var category of catsData) categories.push(category);
         }
       }
     } else {
@@ -68,17 +61,18 @@ export function getArticles(inputFolder: string, prefix: string, debug: boolean 
         if (obj.type == 'table') {
           console.log(`Database: ${obj.database}`)
           console.log(`Table: ${obj.name}`)
-          const artsData = obj.data
-          for (var article of artsData) {
-            articles.push({
-              idx: parseInt(article.id),
-              catIdx: parseInt(article.catid),
-              name: article.title,
-              alias: article.alias,
-              created: article.created,
-              body: article.introtext,
-            })
-          }
+          articles = obj.data;
+          // const artsData = obj.data
+          // for (var article of artsData) {
+          //   articles.push({
+          //     idx: parseInt(article.id),
+          //     catIdx: parseInt(article.catid),
+          //     name: article.title,
+          //     alias: article.alias,
+          //     created: article.created,
+          //     body: article.introtext,
+          //   })
+          // }
         }
       }
     } else {
@@ -87,6 +81,7 @@ export function getArticles(inputFolder: string, prefix: string, debug: boolean 
   } else {
     console.log(`Input folder: "${inputFolder}" does not exist.`)
   }
+  // no need to sort the articles?
   return articles
 }
 

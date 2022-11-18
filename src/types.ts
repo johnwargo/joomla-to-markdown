@@ -91,16 +91,16 @@ export type Article = {
   checked_out_time: string;
   publish_up: string;
   publish_down: string;
-  images: Image;
-  urls: Urls;
-  attribs: Attribs;
+  images: ArticleImages;
+  urls: ArticleUrls;
+  attribs: ArticleAttribs;
   version: string;
   ordering: string;
   metakey: string;
   metadesc: string;
   access: string;
   hits: string;
-  metadata: Metadata;
+  metadata: ArticleMetadata;
   featured: string;
   language: string;
   xreference: string;
@@ -114,7 +114,7 @@ export type Article = {
   // body: string
 };
 
-export type Images = {
+export type ArticleImages = {
   image_intro: string;
   float_intro: string;
   image_intro_alt: string;
@@ -125,7 +125,7 @@ export type Images = {
   image_fulltext_caption: string;
 }
 
-export type Urls = {
+export type ArticleUrls = {
   urla: boolean;
   urlatext: string;
   targeta: string;
@@ -137,7 +137,7 @@ export type Urls = {
   targetc: string;
 }
 
-export type Attribs = {
+export type ArticleAttribs = {
   article_layout: string;
   show_title: string;
   link_titles: string;
@@ -171,7 +171,7 @@ export type Attribs = {
   show_urls_images_frontend: string;
 }
 
-export type Metadata = {
+export type ArticleMetadata = {
   robots: string;
   author: string;
   rights: string;
