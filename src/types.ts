@@ -30,11 +30,6 @@ export type Category = {
   hits: string;
   language: string;
   version: string;
-
-  // idx: number;
-  // name: string;
-  // alias: string;
-  // path: string;
 };
 
 // Example data
@@ -80,7 +75,7 @@ export type Article = {
   alias: string;
   introtext: string;
   fulltext: string;
-  state: string;
+  state: string;  
   catid: string;
   created: string;
   created_by: string;
@@ -105,13 +100,9 @@ export type Article = {
   language: string;
   xreference: string;
   note: string;
-
-  // idx: number;
-  // catIdx: number;
-  // name: string;
-  // alias: string;
-  // created: string;
-  // body: string
+  // Optional because this gets added later when exporting
+  categoryTitle?: string;
+  categoryAlias?: string;
 };
 
 export type ArticleImages = {

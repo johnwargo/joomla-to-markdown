@@ -6,7 +6,7 @@ import TurndownService = require('turndown');
 
 // internal modules
 import { getArticles, getCategories } from '../utils'
-import { Article, Category  } from '../types';
+import { Article, Category } from '../types';
 import Strings from '../strings'
 
 const crlf = '\r\n';
@@ -42,7 +42,6 @@ export default class Go extends Command {
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(Go)
 
-    var EmptyCategory: Category = { name: 'Unknown', idx: 0, alias: 'unknown', path: 'unknown' };
 
     return new Promise((resolve, reject) => {
       // does the export folder exist? (it should, I don't want to have to worry about creating it)
@@ -72,36 +71,39 @@ export default class Go extends Command {
       if (articles.length > 0) {
         this.log(`Articles: ${articles.length.toLocaleString("en-US")}\n`)
         for (var article of articles) {
+          // Find the category title for this article
           var category: Category = <Category>categories.find(c => c.id === article.catid);
-          if (!category) category = EmptyCategory;
-          ExportArticle(article, category, outputFolder);
+          // Set the category title and alias in the article object
+          // category alias is (currently) used in the file name
+          article.categoryTitle = category ? category.title : 'Unknown';
+          article.categoryAlias = category ? category.alias : 'unknown';
+          ExportArticle(article, outputFolder);
         }
       } else {
         this.error('No articles found.')
       }
-      // we made it this far, so resolve the promise
-      resolve();
+      resolve();  // we made it this far, so resolve the promise
     });
 
   }
 }
 
 function buildFileString(heading: string, text: string): string {
-  return `**${heading}:** ${text}${crlf}`;
+  return `**${heading.trim()}:** ${text}${crlf}`;
 }
 
-async function ExportArticle(article: Article, category: Category, outputFolder: string) {
-  console.log(`ExportArticle('${article.title}', '${category.title}', '${outputFolder}')`);
+async function ExportArticle(article: Article, outputFolder: string) {
+  console.log(`ExportArticle('${article.title}', '${outputFolder}')`);
   // Calculate the file name
   // var outputFileName = path.join(outputFolder, `${article.created}-${category.alias}-${article.alias}.md`);
-  var outputFileName = path.join(outputFolder, `${category.alias}-${article.alias}.md`);
+  var outputFileName = path.join(outputFolder, `${article.categoryAlias}-${article.alias}.md`);
   console.log(`\nOutput File: '${outputFileName}'\n`);
   var docBody = '';
   docBody += buildFileString('Title', article.title);
   docBody += buildFileString('ID', article.id.toString());
   docBody += buildFileString('Alias', article.alias);
-  docBody += buildFileString('Category', category.title);
-  docBody += buildFileString('catIdx', category.id.toString());
+  docBody += buildFileString('Category', article.categoryTitle!);
+  docBody += buildFileString('Category ID', article.catid);
   docBody += buildFileString('Created', article.created);
   docBody += crlf;
   // convert the article body to markdown  
