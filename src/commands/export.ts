@@ -58,7 +58,7 @@ export default class Go extends Command {
 
     return new Promise((resolve, reject) => {
 
-      this.log(`\nValidating Inout Parameters\n============================`);
+      this.log(`\nValidating Input Parameters\n===========================`);
       // does the export folder exist? (it should, I don't want to have to worry about creating it)      
       const outputFolder = path.join('./', args[strings.outputFolderParam]);
       if (fs.existsSync(outputFolder)) {
@@ -68,7 +68,7 @@ export default class Go extends Command {
       }
 
       // Do we have a template argument?
-      if (args[strings.templateParam].length > 0) {
+      if (args[strings.templateParam]) {
         // does the export folder exist? (it should, I don't want to have to worry about creating it)
         const templateFile = path.join('./', args[strings.templateParam]);
         if (fs.existsSync(templateFile)) {
@@ -112,7 +112,7 @@ export default class Go extends Command {
           // category alias is (currently) used in the file name
           article.category_title = category ? category.title : 'Unknown';
           article.category_alias = category ? category.alias : 'unknown';
-          if (args[strings.templateParam].length > 0) {
+          if (args[strings.templateParam]) {
             ExportArticle(article, template, replacements, outputFolder);
           } else {
             writeArticle(article, outputFolder);
@@ -130,9 +130,14 @@ function zeroPad(tmpVal: string): string {
   return tmpVal.toString().padStart(2, '0');
 }
 
+function fixFileName(fileName: string): string {
+  // remove forbidden characters from the file name
+  return fileName.trim().toLowerCase().replace(/[\\/:"*?<>|]+/g, '');
+}
+
 function buildJekyllFileName(title: string, articleDate: string): string {
   // replace spaces with dashes
-  var tempTitle = title.trim().toLowerCase().replace(/\s+/g, '-');
+  var tempTitle = fixFileName(title).replace(/\s+/g, '-');
   // convert the date string into a Date/Time object
   var tempDate = parseJSON(articleDate);
   // build the file name
@@ -148,7 +153,7 @@ async function ExportArticle(
 
   var docBody: string;
 
-  console.log(`ExportArticle('${article.title}', template, '${outputFolder}', replacements)`);
+  console.log(`\nExportArticle('${article.title}', template, '${outputFolder}', replacements)`);
   if (debug) console.dir(article);
   // convert the article body to markdown
   article.introtext = turndownService.turndown(article.introtext);
@@ -160,10 +165,7 @@ async function ExportArticle(
     // just in case the template uses mixed case for this property
     var searchText: string = replacement.toString().toLowerCase();
     // strip the braces and any errant spaces
-    var propertyName: string = searchText.
-      replace('{{', '')
-      .replace('}}', '')
-      .trim();
+    var propertyName: string = searchText.replace('{{', '').replace('}}', '').trim();
     // get the value of the property
     // @ts-ignore
     var propertyValue: string = article[propertyName];
@@ -181,24 +183,27 @@ async function ExportArticle(
 
   if (debug) console.dir(docBody);
 
-  // Calculate the output file name
+  // Calculate the output file name  
   var outputFileName = path.join(outputFolder, buildJekyllFileName(article.title, article.created));
-  outputFileName = outputFileName.replace(/[\\/:"*?<>|]+/g, '');
-  console.log(`Writing file '${outputFileName}'`);
+  outputFileName = outputFileName
+  console.log(`Writing file '${outputFileName}'\n`);
   // write the body to the file
   fs.writeFileSync(outputFileName, docBody, {});
 }
 
-async function writeArticle(article: Article, outputFolder: string) {
+async function writeArticle(
+  article: Article,
+  outputFolder: string,
+  debug: boolean = false) {
   const crlf = '\r\n';
   function buildFileString(heading: string, text: string): string {
     return `**${heading.trim()}:** ${text}${crlf}`;
   }
 
   console.log(`writeArticle('${article.title}', '${outputFolder}')`);
-  var outputFileName = path.join(outputFolder, `${article.category_alias}-${article.alias}.md`);
-  outputFileName = outputFileName.replace(/[\\/:"*?<>|]+/g, '');
-  console.log(`\nOutput File: '${outputFileName}'\n`);
+  var outputFileName = path.join(outputFolder, fixFileName(`${article.category_alias}-${article.alias}.md`));
+  outputFileName = outputFileName.replace(/[\:"*?<>|]+/g, '');
+  console.log(`Output File: '${outputFileName}'\n`);
   var docBody = '';
   docBody += buildFileString('Title', article.title);
   docBody += buildFileString('ID', article.id.toString());
