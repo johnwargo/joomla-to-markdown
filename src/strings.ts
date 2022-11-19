@@ -6,7 +6,9 @@ export default class Strings {
   prefixDescription = 'Joomla table export file prefix.';
   sourceFolderParam = 'sourcefolder';
   sourceFolderDescription = 'The folder location for the Joomla table export files; use . for current folder.';
+  templateParam = 'template';
+  templateDescription = 'The template file to use for the exported articles.';
   oneParamExample = '<%= config.bin %> <%= command.id %> outputFolder';
   twoParamExample = '<%= config.bin %> <%= command.id %> sourceFolder j3TablePrefix';
-  threeParamExample = '<%= config.bin %> <%= command.id %> sourceFolder j3TablePrefix outputFolder';
+  fourParamExample = '<%= config.bin %> <%= command.id %> sourceFolder j3TablePrefix outputFolder templateFilePath';
 }

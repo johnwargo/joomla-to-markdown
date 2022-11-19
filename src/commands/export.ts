@@ -20,14 +20,14 @@ import Strings from '../strings'
 const crlf = '\r\n';
 
 // Create some objects we need to do our work
-var strings = new Strings()
-var turndownService = new Turndown()
+var strings = new Strings();
+var turndownService = new Turndown();
 
 export default class Go extends Command {
   static summary = 'Export'
   static description = 'Export all articles as markdown files.'
   static aliases = ['e']
-  static examples = [strings.threeParamExample]
+  static examples = [strings.fourParamExample]
 
   static flags = { debug: Flags.boolean({ char: 'd' }) }
 
@@ -45,25 +45,49 @@ export default class Go extends Command {
       description: strings.outputFolderDescription,
       required: true
     },
+    {
+      name: strings.templateParam,
+      description: strings.templateDescription,
+      required: true
+    }
   ]
 
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(Go)
 
+    var template: string;
 
     return new Promise((resolve, reject) => {
-      // does the export folder exist? (it should, I don't want to have to worry about creating it)
-      this.log('\nOutput Folder\n=============');
+
+      this.log(`\nValidating Inout Parameters\n============================`);
+      // does the export folder exist? (it should, I don't want to have to worry about creating it)      
       const outputFolder = path.join('./', args[strings.outputFolderParam]);
-      this.log(`Folder: '${outputFolder}'`);
       if (fs.existsSync(outputFolder)) {
-        this.log('Folder exists\n');
+        this.log(`Folder '${outputFolder}' exists`);
       } else {
-        this.error('Output folder does not exist, please create it and try again.');
+        this.error(`Output folder '${outputFolder}' does not exist, please create it and try again.`);
       }
 
+      // does the export folder exist? (it should, I don't want to have to worry about creating it)
+      const templateFile = path.join('./', args[strings.templateParam]);
+      if (fs.existsSync(templateFile)) {
+        this.log(`Template file '${templateFile}' exists`);
+      } else {
+        this.error(`Template file '${templateFile}'does not exist, please correct the file name and try again.`);
+      }
+
+      this.log('Checking template file for replacable tokens\n');
+      // read the template file
+      template = fs.readFileSync(templateFile, 'utf8');
+      // get the template code matches
+      const replacements: string[] | null = template.match(/\{{[^)]*\}}/g);
+      if (!replacements) {
+        this.error('Template file contains no replacement tokens, please correct the file and try again.');
+      }
+      console.dir(replacements);
+
       // start by getting the categories
-      console.log('Categories\n==========');
+      console.log('\nCategories\n==========');
       var categories: Category[] = getCategories(args[strings.sourceFolderParam],
         args[strings.prefixParam], flags.debug);
       if (categories.length > 0) {
@@ -85,7 +109,7 @@ export default class Go extends Command {
           // category alias is (currently) used in the file name
           article.categoryTitle = category ? category.title : 'Unknown';
           article.categoryAlias = category ? category.alias : 'unknown';
-          ExportArticle(article, outputFolder);
+          ExportArticle(article, template, replacements, outputFolder);
           // writeArticle(article, outputFolder);
         }
       } else {
@@ -109,12 +133,28 @@ function buildJekyllFileName(title: string, articleDate: string): string {
   return `${tempDate.getFullYear()}-${zeroPad(tempDate.getMonth() + 1)}-${zeroPad(tempDate.getDate())}-${tempTitle}.md`;
 }
 
-async function ExportArticle(article: Article, outputFolder: string) {
-  console.log(`ExportArticle('${article.title}', '${outputFolder}')`);
-  // Calculate the file name
-  var outputFileName = path.join(outputFolder, buildJekyllFileName(article.title, article.created));
-  console.log(outputFileName);
+async function ExportArticle(
+  article: Article,
+  template: string,
+  replacements: string[],
+  outputFolder: string) {
+  // console.log(`ExportArticle('${article.title}', template, '${outputFolder}')`);
 
+  // Calculate the output file name
+  var outputFileName = path.join(outputFolder, buildJekyllFileName(article.title, article.created));
+  // console.log(outputFileName);
+
+  // convert the article body to markdown
+  article.introtext = turndownService.turndown(article.introtext);
+
+  // copy the template into the document body
+  var docBody = template;
+  // process the replacements
+  for (var replacement of replacements) {
+
+  }
+  // write the body to the file
+  // fs.writeFileSync(outputFileName, docBody, {});
 }
 
 async function writeArticle(article: Article, outputFolder: string) {

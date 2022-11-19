@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  {{article.title}}
+title:  {{title}}
 date:   2022-11-18 15:29:16 -0500
-categories: {{article.categoryTitle}}
+categories: {{categoryTitle}}
 ---
-{{article.introtext}}
+{{introtext}}
