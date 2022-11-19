@@ -80,6 +80,8 @@ export default class Go extends Command {
       if (articles.length > 0) {
         this.log(`Articles: ${articles.length.toLocaleString("en-US")}\n`)
         for (var article of articles) {
+          // Preprocess all of the image tags in the article first
+          article.introtext = imagePreprocesser(article.introtext);
           // Find the category title for this article
           var category: Category = <Category>categories.find(c => c.id === article.catid);
           // Set the category title and alias in the article object
@@ -96,7 +98,6 @@ export default class Go extends Command {
 
   }
 }
-
 function zeroPad(tmpVal: string): string {
   return tmpVal.toString().padStart(2, '0');
 }
@@ -117,20 +118,18 @@ function imagePreprocesser(content: string): string {
   // var tmp = inner.replace(/<img .*?>/g,"REPLACED"); 
   // const sources = html.match(/<img [^>]*src="[^"]*"[^>]*>/gm)
 
-  var tmpContent: string;
+  var tmpContent: string = content;
+  
 
-  do {} while 
-
-
-  // Loop through the content file loooking for image tags
+    // Loop through the content file loooking for image tags
 
   var imageURL = '';
   var imageAlt = '';
 
-  return `![imageAlt](imageUrl)`;
+  // return `![imageAlt](imageUrl)`;
 
 
-  return 
+  return  tmpContent;
   
 }
 
