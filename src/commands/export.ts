@@ -17,8 +17,6 @@ import { getArticles, getCategories } from '../utils'
 import { Article, Category } from '../types';
 import Strings from '../strings'
 
-const crlf = '\r\n';
-
 // Create some objects we need to do our work
 var strings = new Strings();
 var turndownService = new Turndown();
@@ -80,7 +78,7 @@ export default class Go extends Command {
       // read the template file
       template = fs.readFileSync(templateFile, 'utf8');
       // get the template code matches
-      const replacements: string[] | null = template.match(/\{{[^)]*\}}/g);
+      const replacements: string[] | null = template.match(/\{\{([^}]+)\}\}/g);
       if (!replacements) {
         this.error('Template file contains no replacement tokens, please correct the file and try again.');
       }
@@ -157,25 +155,26 @@ async function ExportArticle(
   // fs.writeFileSync(outputFileName, docBody, {});
 }
 
-async function writeArticle(article: Article, outputFolder: string) {
-  function buildFileString(heading: string, text: string): string {
-    return `**${heading.trim()}:** ${text}${crlf}`;
-  }
+// async function writeArticle(article: Article, outputFolder: string) {
+  // const crlf = '\r\n';
+//   function buildFileString(heading: string, text: string): string {
+//     return `**${heading.trim()}:** ${text}${crlf}`;
+//   }
 
-  console.log(`ExportArticle('${article.title}', '${outputFolder}')`);
-  var outputFileName = path.join(outputFolder, `${article.categoryAlias}-${article.alias}.md`);
-  console.log(`\nOutput File: '${outputFileName}'\n`);
-  var docBody = '';
-  docBody += buildFileString('Title', article.title);
-  docBody += buildFileString('ID', article.id.toString());
-  docBody += buildFileString('Alias', article.alias);
-  docBody += buildFileString('Category', article.categoryTitle!);
-  docBody += buildFileString('Category ID', article.catid);
-  docBody += buildFileString('Created', article.created);
-  docBody += crlf;
-  // convert the article body to markdown
-  var markdownBody = turndownService.turndown(article.introtext);
-  docBody += markdownBody;
-  // write the body to the file
-  fs.writeFileSync(outputFileName, docBody, {});
-}
+//   console.log(`ExportArticle('${article.title}', '${outputFolder}')`);
+//   var outputFileName = path.join(outputFolder, `${article.categoryAlias}-${article.alias}.md`);
+//   console.log(`\nOutput File: '${outputFileName}'\n`);
+//   var docBody = '';
+//   docBody += buildFileString('Title', article.title);
+//   docBody += buildFileString('ID', article.id.toString());
+//   docBody += buildFileString('Alias', article.alias);
+//   docBody += buildFileString('Category', article.categoryTitle!);
+//   docBody += buildFileString('Category ID', article.catid);
+//   docBody += buildFileString('Created', article.created);
+//   docBody += crlf;
+//   // convert the article body to markdown
+//   var markdownBody = turndownService.turndown(article.introtext);
+//   docBody += markdownBody;
+//   // write the body to the file
+//   fs.writeFileSync(outputFileName, docBody, {});
+// }
