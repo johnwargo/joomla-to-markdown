@@ -17,11 +17,11 @@ import { getArticles, getCategories } from '../utils'
 import { Article, Category } from '../types';
 import Strings from '../strings'
 
-// const crlf = '\r\n';
+const crlf = '\r\n';
 
 // Create some objects we need to do our work
 var strings = new Strings()
-var turndown = new Turndown()
+var turndownService = new Turndown()
 
 export default class Go extends Command {
   static summary = 'Export'
@@ -79,8 +79,6 @@ export default class Go extends Command {
       if (articles.length > 0) {
         this.log(`Articles: ${articles.length.toLocaleString("en-US")}\n`)
         for (var article of articles) {
-          // Preprocess all of the image tags in the article first
-          article.introtext = imagePreprocesser(article.introtext);
           // Find the category title for this article
           var category: Category = <Category>categories.find(c => c.id === article.catid);
           // Set the category title and alias in the article object
@@ -88,6 +86,7 @@ export default class Go extends Command {
           article.categoryTitle = category ? category.title : 'Unknown';
           article.categoryAlias = category ? category.alias : 'unknown';
           ExportArticle(article, outputFolder);
+          // writeArticle(article, outputFolder);
         }
       } else {
         this.error('No articles found.')
@@ -110,36 +109,7 @@ function buildJekyllFileName(title: string, articleDate: string): string {
   return `${tempDate.getFullYear()}-${zeroPad(tempDate.getMonth() + 1)}-${zeroPad(tempDate.getDate())}-${tempTitle}.md`;
 }
 
-/* Image Preprocessor
-  ==================
-  As good as the Turndown library is at converting HTML to Markdown, it doesn't copy the 
-  Joomla Image tag alternative text into the Markdown image tag. This function looks for 
-  all of the image tags and replaces them with markdown image tags that include the alt text.
-*/
-function imagePreprocesser(content: string): string {
-  // https://www.rapiddg.com/article/regex-corner-extract-image-tags-html
-  // <img[^>]*src="([^"]+)"[^>]*>
-  // https://stackoverflow.com/questions/32046081/js-regex-to-remove-img-tag-from-string
-  // var tmp = inner.replace(/<img .*?>/g,"REPLACED"); 
-  // const sources = html.match(/<img [^>]*src="[^"]*"[^>]*>/gm)
-
-  var tmpContent: string = content;
-  
-
-    // Loop through the content file loooking for image tags
-
-  var imageURL = '';
-  var imageAlt = '';
-
-  // return `![imageAlt](imageUrl)`;
-
-
-  return  tmpContent;
-  
-}
-
 async function ExportArticle(article: Article, outputFolder: string) {
-  
   console.log(`ExportArticle('${article.title}', '${outputFolder}')`);
   // Calculate the file name
   var outputFileName = path.join(outputFolder, buildJekyllFileName(article.title, article.created));
@@ -147,25 +117,25 @@ async function ExportArticle(article: Article, outputFolder: string) {
 
 }
 
-// async function writeArticle(article: Article, outputFolder: string) {
-//   function buildFileString(heading: string, text: string): string {
-//     return `**${heading.trim()}:** ${text}${crlf}`;
-//   }
+async function writeArticle(article: Article, outputFolder: string) {
+  function buildFileString(heading: string, text: string): string {
+    return `**${heading.trim()}:** ${text}${crlf}`;
+  }
 
-//   console.log(`ExportArticle('${article.title}', '${outputFolder}')`);
-//   var outputFileName = path.join(outputFolder, `${article.categoryAlias}-${article.alias}.md`);
-//   console.log(`\nOutput File: '${outputFileName}'\n`);
-//   var docBody = '';
-//   docBody += buildFileString('Title', article.title);
-//   docBody += buildFileString('ID', article.id.toString());
-//   docBody += buildFileString('Alias', article.alias);
-//   docBody += buildFileString('Category', article.categoryTitle!);
-//   docBody += buildFileString('Category ID', article.catid);
-//   docBody += buildFileString('Created', article.created);
-//   docBody += crlf;
-//   // convert the article body to markdown  
-//   var markdownBody = turndownService.turndown(article.introtext);
-//   docBody += markdownBody;
-//   // write the body to the file
-//   fs.writeFileSync(outputFileName, docBody, {});
-// }
+  console.log(`ExportArticle('${article.title}', '${outputFolder}')`);
+  var outputFileName = path.join(outputFolder, `${article.categoryAlias}-${article.alias}.md`);
+  console.log(`\nOutput File: '${outputFileName}'\n`);
+  var docBody = '';
+  docBody += buildFileString('Title', article.title);
+  docBody += buildFileString('ID', article.id.toString());
+  docBody += buildFileString('Alias', article.alias);
+  docBody += buildFileString('Category', article.categoryTitle!);
+  docBody += buildFileString('Category ID', article.catid);
+  docBody += buildFileString('Created', article.created);
+  docBody += crlf;
+  // convert the article body to markdown
+  var markdownBody = turndownService.turndown(article.introtext);
+  docBody += markdownBody;
+  // write the body to the file
+  fs.writeFileSync(outputFileName, docBody, {});
+}
