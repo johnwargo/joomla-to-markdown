@@ -110,7 +110,8 @@ export default class Go extends Command {
           var category: Category = <Category>categories.find(c => c.id === article.catid);
           // Set the category title and alias in the article object
           // category alias is (currently) used in the file name
-          article.category_title = category ? category.title : 'Unknown';
+          // strip colons from the title
+          article.category_title = category ? category.title.replace(/:/g,'') : 'Unknown';
           article.category_alias = category ? category.alias : 'unknown';
           if (args[strings.templateParam]) {
             ExportArticle(article, template, replacements, outputFolder);
