@@ -1,9 +1,8 @@
 /* 
-  Export module
-
+  Export Command
+  ==============
   Using a template, exports all of the Joomla article content into 
-  separate markdown files in the output folder
-
+  separate markdown files in the output folder. 
 */
 
 // export the articles
@@ -18,7 +17,7 @@ import { getArticles, getCategories } from '../utils'
 import { Article, Category } from '../types';
 import Strings from '../strings'
 
-const crlf = '\r\n';
+// const crlf = '\r\n';
 
 // Create some objects we need to do our work
 var strings = new Strings()
@@ -111,6 +110,12 @@ function buildJekyllFileName(title: string, articleDate: string): string {
   return `${tempDate.getFullYear()}-${zeroPad(tempDate.getMonth() + 1)}-${zeroPad(tempDate.getDate())}-${tempTitle}.md`;
 }
 
+/* Image Preprocessor
+  ==================
+  As good as the Turndown library is at converting HTML to Markdown, it doesn't copy the 
+  Joomla Image tag alternative text into the Markdown image tag. This function looks for 
+  all of the image tags and replaces them with markdown image tags that include the alt text.
+*/
 function imagePreprocesser(content: string): string {
   // https://www.rapiddg.com/article/regex-corner-extract-image-tags-html
   // <img[^>]*src="([^"]+)"[^>]*>
