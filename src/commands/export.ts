@@ -20,6 +20,7 @@ import Strings from '../strings'
 // Create some objects we need to do our work
 var strings = new Strings();
 var turndownService = new Turndown();
+var replacements: RegExpMatchArray[] = [];
 
 export default class Go extends Command {
   static summary = 'Export'
@@ -46,7 +47,7 @@ export default class Go extends Command {
     {
       name: strings.templateParam,
       description: strings.templateDescription,
-      required: true
+      required: false
     }
   ]
 
@@ -66,23 +67,27 @@ export default class Go extends Command {
         this.error(`Output folder '${outputFolder}' does not exist, please create it and try again.`);
       }
 
-      // does the export folder exist? (it should, I don't want to have to worry about creating it)
-      const templateFile = path.join('./', args[strings.templateParam]);
-      if (fs.existsSync(templateFile)) {
-        this.log(`Template file '${templateFile}' exists`);
-      } else {
-        this.error(`Template file '${templateFile}'does not exist, please correct the file name and try again.`);
-      }
+      // Do we have a template argument?
+      if (args[strings.templateParam].length > 0) {
+        // does the export folder exist? (it should, I don't want to have to worry about creating it)
+        const templateFile = path.join('./', args[strings.templateParam]);
+        if (fs.existsSync(templateFile)) {
+          this.log(`Template file '${templateFile}' exists`);
+        } else {
+          this.error(`Template file '${templateFile}'does not exist, please correct the file name and try again.`);
+        }
 
-      this.log('Checking template file for replacable tokens\n');
-      // read the template file
-      template = fs.readFileSync(templateFile, 'utf8');
-      // get the template code matches
-      const replacements: string[] | null = template.match(/\{\{([^}]+)\}\}/g);
-      if (!replacements) {
-        this.error('Template file contains no replacement tokens, please correct the file and try again.');
+        this.log('Checking template file for replacable tokens\n');
+        // read the template file
+        template = fs.readFileSync(templateFile, 'utf8');
+        // get the template code matches
+        // @ts-ignore
+        replacements = template.match(/\{\{([^}]+)\}\}/g);
+        if (!replacements) {
+          this.error('Template file contains no replacement tokens, please correct the file and try again.');
+        }
+        console.dir(replacements);
       }
-      console.dir(replacements);
 
       // start by getting the categories
       console.log('\nCategories\n==========');
@@ -107,8 +112,11 @@ export default class Go extends Command {
           // category alias is (currently) used in the file name
           article.category_title = category ? category.title : 'Unknown';
           article.category_alias = category ? category.alias : 'unknown';
-          ExportArticle(article, template, replacements, outputFolder);
-          // writeArticle(article, outputFolder);
+          if (args[strings.templateParam].length > 0) {
+            ExportArticle(article, template, replacements, outputFolder);
+          } else {
+            writeArticle(article, outputFolder);
+          }
         }
       } else {
         this.error('No articles found.')
@@ -134,15 +142,14 @@ function buildJekyllFileName(title: string, articleDate: string): string {
 async function ExportArticle(
   article: Article,
   template: string,
-  replacements: string[],
-  outputFolder: string) {
+  replacements: RegExpMatchArray[],
+  outputFolder: string,
+  debug: boolean = false) {
 
   var docBody: string;
 
   console.log(`ExportArticle('${article.title}', template, '${outputFolder}', replacements)`);
-
-  console.dir(article);
-
+  if (debug) console.dir(article);
   // convert the article body to markdown
   article.introtext = turndownService.turndown(article.introtext);
 
@@ -151,7 +158,7 @@ async function ExportArticle(
   // process the replacements
   for (var replacement of replacements) {
     // just in case the template uses mixed case for this property
-    var searchText: string = replacement.toLowerCase();
+    var searchText: string = replacement.toString().toLowerCase();
     // strip the braces and any errant spaces
     var propertyName: string = searchText.
       replace('{{', '')
@@ -161,8 +168,10 @@ async function ExportArticle(
     // @ts-ignore
     var propertyValue: string = article[propertyName];
 
-    console.log(`Category Title: ${article.category_title}`);
-    console.log(`\nSearch Text: ${searchText}, property name: ${propertyName}, replace with '${propertyValue}'`);
+    if (debug) {
+      console.log(`Category Title: ${article.category_title}`);
+      console.log(`\nSearch Text: ${searchText}, property name: ${propertyName}, replace with '${propertyValue}'`);
+    }
 
     if (propertyValue) {
       // @ts-ignore
@@ -170,34 +179,37 @@ async function ExportArticle(
     }
   }
 
-  console.dir(docBody);
+  if (debug) console.dir(docBody);
 
   // Calculate the output file name
   var outputFileName = path.join(outputFolder, buildJekyllFileName(article.title, article.created));
+  outputFileName = outputFileName.replace(/[\\/:"*?<>|]+/g, '');
+  console.log(`Writing file '${outputFileName}'`);
   // write the body to the file
   fs.writeFileSync(outputFileName, docBody, {});
 }
 
-// async function writeArticle(article: Article, outputFolder: string) {
-  // const crlf = '\r\n';
-//   function buildFileString(heading: string, text: string): string {
-//     return `**${heading.trim()}:** ${text}${crlf}`;
-//   }
+async function writeArticle(article: Article, outputFolder: string) {
+  const crlf = '\r\n';
+  function buildFileString(heading: string, text: string): string {
+    return `**${heading.trim()}:** ${text}${crlf}`;
+  }
 
-//   console.log(`ExportArticle('${article.title}', '${outputFolder}')`);
-//   var outputFileName = path.join(outputFolder, `${article.categoryAlias}-${article.alias}.md`);
-//   console.log(`\nOutput File: '${outputFileName}'\n`);
-//   var docBody = '';
-//   docBody += buildFileString('Title', article.title);
-//   docBody += buildFileString('ID', article.id.toString());
-//   docBody += buildFileString('Alias', article.alias);
-//   docBody += buildFileString('Category', article.categoryTitle!);
-//   docBody += buildFileString('Category ID', article.catid);
-//   docBody += buildFileString('Created', article.created);
-//   docBody += crlf;
-//   // convert the article body to markdown
-//   var markdownBody = turndownService.turndown(article.introtext);
-//   docBody += markdownBody;
-//   // write the body to the file
-//   fs.writeFileSync(outputFileName, docBody, {});
-// }
+  console.log(`writeArticle('${article.title}', '${outputFolder}')`);
+  var outputFileName = path.join(outputFolder, `${article.category_alias}-${article.alias}.md`);
+  outputFileName = outputFileName.replace(/[\\/:"*?<>|]+/g, '');
+  console.log(`\nOutput File: '${outputFileName}'\n`);
+  var docBody = '';
+  docBody += buildFileString('Title', article.title);
+  docBody += buildFileString('ID', article.id.toString());
+  docBody += buildFileString('Alias', article.alias);
+  docBody += buildFileString('Category', article.category_title!);
+  docBody += buildFileString('Category ID', article.catid);
+  docBody += buildFileString('Created', article.created);
+  docBody += crlf;
+  // convert the article body to markdown
+  var markdownBody = turndownService.turndown(article.introtext);
+  docBody += markdownBody;
+  // write the body to the file
+  fs.writeFileSync(outputFileName, docBody, {});
+}
