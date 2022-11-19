@@ -101,8 +101,8 @@ export type Article = {
   xreference: string;
   note: string;
   // Optional because this gets added later when exporting
-  categoryTitle?: string;
-  categoryAlias?: string;
+  category_title?: string;
+  category_alias?: string;
 };
 
 export type ArticleImages = {

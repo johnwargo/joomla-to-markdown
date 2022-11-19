@@ -105,8 +105,8 @@ export default class Go extends Command {
           var category: Category = <Category>categories.find(c => c.id === article.catid);
           // Set the category title and alias in the article object
           // category alias is (currently) used in the file name
-          article.categoryTitle = category ? category.title : 'Unknown';
-          article.categoryAlias = category ? category.alias : 'unknown';
+          article.category_title = category ? category.title : 'Unknown';
+          article.category_alias = category ? category.alias : 'unknown';
           ExportArticle(article, template, replacements, outputFolder);
           // writeArticle(article, outputFolder);
         }
@@ -136,23 +136,46 @@ async function ExportArticle(
   template: string,
   replacements: string[],
   outputFolder: string) {
-  // console.log(`ExportArticle('${article.title}', template, '${outputFolder}')`);
 
-  // Calculate the output file name
-  var outputFileName = path.join(outputFolder, buildJekyllFileName(article.title, article.created));
-  // console.log(outputFileName);
+  var docBody: string;
+
+  console.log(`ExportArticle('${article.title}', template, '${outputFolder}', replacements)`);
+
+  console.dir(article);
 
   // convert the article body to markdown
   article.introtext = turndownService.turndown(article.introtext);
 
   // copy the template into the document body
-  var docBody = template;
+  docBody = template;
   // process the replacements
   for (var replacement of replacements) {
+    // just in case the template uses mixed case for this property
+    var searchText: string = replacement.toLowerCase();
+    // strip the braces and any errant spaces
+    var propertyName: string = searchText.
+      replace('{{', '')
+      .replace('}}', '')
+      .trim();
+    // get the value of the property
+    // @ts-ignore
+    var propertyValue: string = article[propertyName];
 
+    console.log(`Category Title: ${article.category_title}`);
+    console.log(`\nSearch Text: ${searchText}, property name: ${propertyName}, replace with '${propertyValue}'`);
+
+    if (propertyValue) {
+      // @ts-ignore
+      docBody = docBody.replaceAll(searchText, propertyValue);
+    }
   }
+
+  console.dir(docBody);
+
+  // Calculate the output file name
+  var outputFileName = path.join(outputFolder, buildJekyllFileName(article.title, article.created));
   // write the body to the file
-  // fs.writeFileSync(outputFileName, docBody, {});
+  fs.writeFileSync(outputFileName, docBody, {});
 }
 
 // async function writeArticle(article: Article, outputFolder: string) {
