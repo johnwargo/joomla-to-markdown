@@ -18,6 +18,12 @@ To use this module, first install it using the following command:
 npm install j2md -g
 ```
 
+*Note:** To use the module without installing it locally, use the following command:
+
+``` shell
+npx j2md command [parameters]
+```
+
 Next, complete the following steps to export your Joomla data and convert your article content to [Markdown](https://daringfireball.net/projects/markdown/) format:
 
 1. Export your site's `categories` table in JSON format to a local file
@@ -135,6 +141,9 @@ j32md clear output
 ```
 
 ### Export
+
+
+this one's complicated
 
 
 ### Statistics
