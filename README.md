@@ -21,14 +21,14 @@ The [Joomla!](https://www.joomla.org/) to Markdown (`j2md`) module is a node.js 
 To use this module, first install it using the following command:
 
 ``` shell
-npm install j2md -g
+npm install joomla-to-markdown -g
 ```
 
-**Note:** To use the module without installing it locally, use the following command instead:
+<!-- **Note:** To use the module without installing it locally, use the following command instead:
 
 ``` shell
 npx j2md command [parameters]
-```
+``` -->
 
 Using the supported commands listed in the following section.
 
