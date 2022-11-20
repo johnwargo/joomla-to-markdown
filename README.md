@@ -46,7 +46,7 @@ To use the module, you must complete the following steps to export your Joomla d
 3. Craft a template file (instructions below) that describes the format of the exported markdown file for each Joomla article.
 4. Execute the module's `export` command to convert the contents of the JSON files to individual markdown files for each article.
 
-![MySQL Admin Export Panel](images/figure-01.png)
+![MySQL Admin Export Panel](/images/figure-01.png)
 
 The module uses both the Joomla site's `categories` and `content` table content because the article table only contains references to Category names via is category ID. The module must have access to the `categories` table in order to copy over the category name and category alias values when exporting articles.
 
