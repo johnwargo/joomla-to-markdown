@@ -1,5 +1,7 @@
 # Export Joomla to Markdown
 
+[![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
+
 <!-- TOC -->
 
 - [Export Joomla to Markdown](#export-joomla-to-markdown)
