@@ -30,18 +30,22 @@ Using the supported commands listed in the following section.
 
 To use the module, you must complete the following steps to export your Joomla data and convert your article content to [Markdown](https://daringfireball.net/projects/markdown/) format:
 
-1. Using MySQL Admin (or your export tool of choice), export your site's `categories` table in JSON format to a local file
-2. Export your site's `content` table in JDON format to a local file
-3. Craft a template file (instructions below) that describes the format of the exported markdown file for each Joomla article
+1. Using MySQL Admin (or your export tool of choice), export your site's `categories` table in JSON format to a local file.
+2. Export your site's `content` table in JDON format to a local file.
+3. Craft a template file (instructions below) that describes the format of the exported markdown file for each Joomla article.
 4. Execute the module's `export` command to convert the contents of the JSON files to individual markdown files for each article.
 
-The module uses both the Joomla site's `catergories` and `content` table content because the article table only contains references to Category names via is category ID. The module must have access to the `categories` table in order to copy over the category name and category alias values when exporting articles.
+![MySQL Admin Export Panel](images/figure-01.png)
+
+The module uses both the Joomla site's `categories` and `content` table content because the article table only contains references to Category names via is category ID. The module must have access to the `categories` table in order to copy over the category name and category alias values when exporting articles.
 
 ## Commands
 
 The following sections illustrate how to use to use each of the commands provided by the module.
 
-### Articles
+### `arts` (Articles)
+
+Use `arts` or `a` for this command.
 
 Display a list of article information to the console; the module reads the `content` export file, parses the content then displays each article Id, Title, and Alias in a table. Use this command to validate the contents of the `content` export.
 
@@ -81,10 +85,11 @@ Table: e4hy6_content
  .                          
  555 Site Upgrade Coming                                      site-upgrade-coming
 ------------------------------------------------------------- -----------------------
-
 ```
 
-### Categories
+### `cats` (Categories)
+
+Use `cats` or `c` for this command.
 
 Display a list of category information to the console; the module reads the `categories` export file, parses the content then displays each article Id, Name, and Path in a table. Use this command to validate the contents of the `categories` export.
 
@@ -127,6 +132,8 @@ Table: e4hy6_categories
 
 ### Clear
 
+Use `clear` or `x` for this command.
+
 Empties (clears) the contents of the output folder where the module writes article markdown files. Use this command to delete all of the exported article files as you try out different template versions or files.
 
 > **Warning** 
@@ -146,11 +153,13 @@ j32md clear output
 
 ### Export
 
+Use `export` or `e` for this command.
 
-this one's complicated
 
 
 ### Statistics
+
+Use `stats` or `s` for this command.
 
 Displays category count and article count for the specified Joomla exported content.  Use this command to determine how many categories and articles are listed in the exported Joomla tables.
 
