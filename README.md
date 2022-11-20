@@ -258,3 +258,9 @@ Table: e4hy3_content
  Categories 35
  Articles   515
 ```
+
+### Getting Help Or Making Changes
+
+Use [GitHub Issues](https://github.com/johnwargo/joomla-to-markdown/issues) to get help with this module.
+
+Pull Requests gladly accepted, but only with complete documentation of what the change is, why you made it, and why you think its important to have in the module.
