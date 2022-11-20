@@ -10,6 +10,7 @@
     - [Clear](#clear)
     - [Export](#export)
     - [Statistics](#statistics)
+    - [Getting Help Or Making Changes](#getting-help-or-making-changes)
 
 <!-- /TOC -->
 
