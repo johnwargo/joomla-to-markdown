@@ -119,7 +119,8 @@ Table: e4hy6_categories
 
 Empties (clears) the contents of the output folder where the module writes article markdown files. Use this command to delete all of the exported article files as you try out different template versions or files.
 
-> **Warning:** The `clear` command deletes all of the files in the specified folder, so use this command carefully. 
+> **Warning** 
+> The `clear` command deletes all of the files in the specified folder, so use this command carefully. 
 
 **Note:** The module automatically overwrites existing files in the output folder, so there's really no need to ever use this command :-)
 
