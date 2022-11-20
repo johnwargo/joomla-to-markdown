@@ -155,6 +155,24 @@ j32md clear output
 
 Use `export` or `e` for this command.
 
+When you've exported your Joomla site's content and you're ready to create markdown files start by creating a template file the module will use to format the exported markdown files. Since I knew I wanted to run this site on Jekyll (before migrating it to Eleventy), I grabbed the default first post from a new Jekyll site and modified it to use as a template for this module. A portion of the sample post is shown below.
+
+``` yml
+---
+layout: post
+title:  "Welcome to Jekyll!"
+date:   2022-11-18 15:29:16 -0500
+categories: jekyll update
+---
+You’ll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run `jekyll serve`, which launches a web server and auto-regenerates your site when a file is updated.
+
+...
+```
+
+Remove the body content from the file (the content below the second `---` in the file) and update the YAML content at the top of the file. Use double curly braces around any Joomla `content` table fields you want inserted in the article file when generated. 
+
+In the example below, I used the table's `title` field for the article Title and `introtext` is the field name for the article's main content.
+
 ``` yml
 ---
 layout: post
@@ -165,6 +183,12 @@ categories: {{category_title}}
 {{introtext}}
 ```
 
+The export process adds two addtional fields to the article record that you can use in your template:
+
+* `category_title`: The `categories` table category name for the selected article.
+* `category_alias`: The `categories` table alias for the selected article.
+
+In the example above, `category_title` is used to set the Jekyll post category.
 
 
 ``` markdown
