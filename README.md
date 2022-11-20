@@ -8,16 +8,32 @@ Shields options once public: https://shields.io/
 <!-- [![Downloads/week](https://img.shields.io/npm/dw/oclif-hello-world.svg)](https://npmjs.org/package/oclif-hello-world)
 [![License](https://img.shields.io/npm/l/oclif-hello-world.svg)](https://github.com/johnwargo/joomla3-2-markdown/blob/main/package.json) -->
 
-The Joomla 3 to Markdown (`j32md`) module is a node.js command line utility for converting Joomla 3 article content into markdown files. 
+The [Joomla 3](https://www.joomla.org/) to Markdown (`j32md`) module is a node.js command line utility for converting Joomla 3 article content into markdown files. I needed to migrate an old Jomla 3 site to another platform and wrote this module to handle the heavy lifting for me. I wanted to use something like [Jekyll](https://jekyllrb.com/) or [Eleventy](https://www.11ty.dev/) for my site and knew that both supported markdown files.
 
-Export categories and content tables from your Joomla 3 site
-Run this utility and you'll get each article in a separate markdown file.
+**Note:** This module was only tested against data from a Joomla 3 site running on MySQL; it could very well work with a Joomla 4 site, I just haven't tested it.
 
+To use this module, first install it using the following command:
+
+``` shell
+npm install j32m3 -g
+```
+
+Next, complete the following steps to export your Joomla data and convert your article content to [Markdown](https://daringfireball.net/projects/markdown/) format:
+
+1. Export your site's `categories` table in JSON format to a local file
+2. Export your site's `content` table in JDON format to a local file
+3. Craft a template file (instructions below) that describes the format of the exported markdown file for each Joomla article
+4. Execute the module's `export` command to convert the contents of the JSON files to individual markdown files for each article.
+
+The module uses both the Joomla site's `catrgories` and `content` table content because the article table only contains references to Category names via is category ID. The module must have access to the `categories` table in order to copy over the category name and category alias values when exporting articles.
 
 ## Commands
 
 ### Articles
 
+``` shell
+j32md stats input e4hy6
+```
 
 ### Categories
 
