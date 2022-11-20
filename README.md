@@ -184,13 +184,13 @@ You’ll find this post in your `_posts` directory. Go ahead and edit it and re-
 
 Remove the body content from the file (the content below the second `---` in the file) and update the YAML content at the top of the file. Use double curly braces around any Joomla `content` table fields you want inserted in the article file when generated. 
 
-In the example below, I used the table's `title` field for the article Title and `introtext` is the field name for the article's main content.
+In the example below, I used the table's `title` field for the article Title, `created` field for the article date, and `introtext` is the field name for the article's main content.
 
 ``` yml
 ---
 layout: post
 title:  {{title}}
-date:   2022-11-18 15:29:16 -0500
+date:   {{created}}
 categories: {{category_title}}
 ---
 {{introtext}}
