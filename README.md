@@ -15,7 +15,7 @@ The [Joomla 3](https://www.joomla.org/) to Markdown (`j32md`) module is a node.j
 To use this module, first install it using the following command:
 
 ``` shell
-npm install j32m3 -g
+npm install j32md -g
 ```
 
 Next, complete the following steps to export your Joomla data and convert your article content to [Markdown](https://daringfireball.net/projects/markdown/) format:
