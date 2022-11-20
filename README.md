@@ -5,11 +5,11 @@
 - [Export Joomla to Markdown](#export-joomla-to-markdown)
   - [Preparing for Use](#preparing-for-use)
   - [Commands](#commands)
-    - [arts Articles](#arts-articles)
-    - [cats Categories](#cats-categories)
-    - [clear Clear](#clear-clear)
-    - [export Export](#export-export)
-    - [stats Statistics](#stats-statistics)
+    - [Articles](#articles)
+    - [Categories](#categories)
+    - [Clear](#clear)
+    - [Export](#export)
+    - [Statistics](#statistics)
 
 <!-- /TOC -->
 
@@ -48,7 +48,7 @@ The module uses both the Joomla site's `categories` and `content` table content 
 
 The following sections illustrate how to use to use each of the commands provided by the module.
 
-### `arts` (Articles)
+### Articles
 
 Use `arts` or `a` for this command.
 
@@ -92,7 +92,7 @@ Table: e4hy6_content
 ------------------------------------------------------------- -----------------------
 ```
 
-### `cats` (Categories)
+### Categories
 
 Use `cats` or `c` for this command.
 
@@ -135,7 +135,7 @@ Table: e4hy6_categories
  -----------------------------------------------------------------------------------------
 ```
 
-### `clear` (Clear)
+### Clear
 
 Use `clear` or `x` for this command.
 
@@ -156,7 +156,7 @@ For example, with all of the exported article markdown files in a folder called 
 j32md clear output
 ```
 
-### `export` (Export)
+### Export
 
 Use `export` or `e` for this command.
 
@@ -228,7 +228,7 @@ This site runs on Joomla, since, I think, the Joomla 1.x days. The Joomla team r
 I haven't used attachments in this site in a long time, so I will soon delete the attachments plugin and update all articles that had attachments (10 articles). I'll put a notice on the top of each affected page and, if the attachment is still relevant, store it somewhere else and provide a link to the file's new location.
 ```
 
-### `stats` (Statistics)
+### Statistics
 
 Use `stats` or `s` for this command.
 
