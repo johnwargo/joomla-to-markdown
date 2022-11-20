@@ -1,7 +1,7 @@
 {
   "name": "joomla-to-markdown",
   "version": "0.0.2",
-  "description": "Converted JSON Exported Joomla article content to markdown files",
+  "description": "Convert JSON Exported Joomla article content to markdown files",
   "author": "John M. Wargo @johnwargo",
   "bin": {
     "j2md": "./bin/run"
@@ -38,7 +38,7 @@
     "eslint-config-oclif": "^4",
     "eslint-config-oclif-typescript": "^1.0.3",
     "mocha": "^9",
-    "oclif": "^3",
+    "oclif": "^3.2.28",
     "shx": "^0.3.3",
     "ts-node": "^10.9.1",
     "tslib": "^2.4.1",
