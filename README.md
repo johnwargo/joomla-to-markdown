@@ -117,6 +117,21 @@ Table: e4hy6_categories
 
 ### Clear
 
+Empties (clears) the contents of the output folder where the module writes article markdown files. Use this command to delete all of the exported article files as you try out different template versions or files.
+
+> hjehifjkdfjk
+
+**Note:** The module automatically overwrites existing files in the output folder, so there's really no need to ever use this command :-)
+
+``` shell
+j32md clear outputFolder
+```
+
+For example, with all of the exported articles in a folder called `output`, you would use the following command:
+
+``` shell
+j32md cats output
+```
 
 ### Export
 
