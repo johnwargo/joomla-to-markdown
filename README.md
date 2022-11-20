@@ -122,7 +122,7 @@ Table: e4hy6_categories
  -----------------------------------------------------------------------------------------
 ```
 
-### Clear
+### `clear` (Clear)
 
 Use `clear` or `x` for this command.
 
@@ -143,7 +143,7 @@ For example, with all of the exported article markdown files in a folder called 
 j32md clear output
 ```
 
-### Export
+### `export` (Export)
 
 Use `export` or `e` for this command.
 
@@ -215,7 +215,7 @@ This site runs on Joomla, since, I think, the Joomla 1.x days. The Joomla team r
 I haven't used attachments in this site in a long time, so I will soon delete the attachments plugin and update all articles that had attachments (10 articles). I'll put a notice on the top of each affected page and, if the attachment is still relevant, store it somewhere else and provide a link to the file's new location.
 ```
 
-### Statistics
+### `stats` (Statistics)
 
 Use `stats` or `s` for this command.
 
@@ -245,4 +245,3 @@ Table: e4hy3_content
  Categories 35
  Articles   515
 ```
-
