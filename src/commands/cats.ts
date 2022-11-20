@@ -33,7 +33,7 @@ export default class Cats extends Command {
     // @ts-ignore
     const columns: CliUx.Table.Columns = {
       // where `.name` is a property of a data object
-      id: { header: 'Idx' },
+      id: { header: 'Id' },
       title: { header: 'Title' },
       path: { header: 'Path' }
     }

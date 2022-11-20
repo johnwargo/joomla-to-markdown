@@ -76,6 +76,42 @@ Table: e4hy6_content
 
 ### Categories
 
+Display a list of category information to the console; the module reads the `categories` export file, parses the content then displays each article Id, Name, and Path in a table.
+
+``` shell
+j32md cats sourceFolder joomlaDatabasePrefix
+```
+
+For example, with all of the Joomla exported content in a folder called `input` and a database prefix of `e4hy6`, you would use the following command:
+
+``` shell
+j32md cats input e4hy6
+```
+
+**Note:** if you don't have the exported Joomla content in a sub-folder, simply use `.` for the sourceFolder parameter.
+
+The module will read the `e4hy6_categories.json` file and display details for each category in a table as shown below:
+
+Database: jmw_cms
+Table: e4hy6_categories
+
+35 Categories
+
+ Idx Title                      Path                                                      
+ ─── ────────────────────────── ────────────────────────────────────────────────────────── 
+ 37  Apache Cordova             category-posts/category-mobile-development/apache-cordova
+ 2   BlackBerry                 category-posts/category-blackberry
+ 38  BlackBerry Development     category-posts/category-mobile-development/blackberry-dev
+ 39  Code Projects              code-projects
+ 8   Content Management Systems category-posts/category-cms
+ 36  Guests                     category-posts/category-guests
+ 3   IBM Lotus Domino           category-posts/category-domino                            
+ 41  Internet of Things (IoT)   category-posts/category-iot
+ 9   Miscellaneous              category-posts/category-miscellaneous
+ 15  Mobile                     category-posts/category-mobile
+ 14  Mobile Development         category-posts/category-mobile-development
+ 18  Posts                      category-posts
+ -----------------------------------------------------------------------------------------
 
 ### Clear
 
