@@ -1,0 +1,13 @@
+# Folders
+/src
+/images
+/test
+
+# Files
+.editorconfig
+.eslintrc
+.eslintignore
+.mocharc.json
+jekyll.md 
+tsconfig.json
+

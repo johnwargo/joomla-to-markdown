@@ -10,7 +10,7 @@ Shields options once public: https://shields.io/
 
 The [Joomla 3](https://www.joomla.org/) to Markdown (`j32md`) module is a node.js command line utility for converting Joomla 3 article content into markdown files. I needed to migrate an old Jomla 3 site to another platform and wrote this module to handle the heavy lifting for me. I wanted to use something like [Jekyll](https://jekyllrb.com/) or [Eleventy](https://www.11ty.dev/) for my site and knew that both supported markdown files.
 
-**Note:** This module was only tested against data from a Joomla 3 site running on MySQL; it could very well work with a Joomla 4 site, I just haven't tested it.
+**Note:** This module was only tested against data from a Joomla 3 site running on MySQL; it could very well work with a Joomla 4 site, I just haven't tested it (yet).
 
 To use this module, first install it using the following command:
 
@@ -30,7 +30,7 @@ Using the supported commands listed in the following section.
 
 To use the module, you must complete the following steps to export your Joomla data and convert your article content to [Markdown](https://daringfireball.net/projects/markdown/) format:
 
-1. Export your site's `categories` table in JSON format to a local file
+1. Using MySQL Admin (or your export tool of choice), export your site's `categories` table in JSON format to a local file
 2. Export your site's `content` table in JDON format to a local file
 3. Craft a template file (instructions below) that describes the format of the exported markdown file for each Joomla article
 4. Execute the module's `export` command to convert the contents of the JSON files to individual markdown files for each article.
