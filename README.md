@@ -1,13 +1,5 @@
 # Export Joomla to Markdown
 
-[![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
-
-Shields options once public: https://shields.io/
-<!-- [![Version](https://img.shields.io/npm/v/oclif-hello-world.svg)](https://npmjs.org/package/oclif-hello-world) -->
-<!-- [![CircleCI](https://circleci.com/gh/oclif/hello-world/tree/main.svg?style=shield)](https://circleci.com/gh/oclif/hello-world/tree/main) -->
-<!-- [![Downloads/week](https://img.shields.io/npm/dw/oclif-hello-world.svg)](https://npmjs.org/package/oclif-hello-world)
-[![License](https://img.shields.io/npm/l/oclif-hello-world.svg)](https://github.com/johnwargo/joomla3-2-markdown/blob/main/package.json) -->
-
 The [Joomla 3](https://www.joomla.org/) to Markdown (`j32md`) module is a node.js command line utility for converting Joomla 3 article content into markdown files. I needed to migrate an old Jomla 3 site to another platform and wrote this module to handle the heavy lifting for me. I wanted to use something like [Jekyll](https://jekyllrb.com/) or [Eleventy](https://www.11ty.dev/) for my site and knew that both supported markdown files.
 
 **Note:** This module was only tested against data from a Joomla 3 site running on MySQL; it could very well work with a Joomla 4 site, I just haven't tested it (yet).
@@ -189,6 +181,7 @@ The export process adds two addtional fields to the article record that you can 
 * `category_alias`: The `categories` table alias for the selected article.
 
 In the example above, `category_title` is used to set the Jekyll post category.
+
 
 
 ``` markdown
