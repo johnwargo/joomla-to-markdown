@@ -139,13 +139,19 @@ j32md clear output
 
 ### Statistics
 
-command
+Displays category count and article count for the specified Joomla exported content.  Use this command to determine how many categories and articles are listed in the exported Joomla tables.
+
+``` shell
+j32md cats sourceFolder joomlaDatabasePrefix
+```
+
+For example, with all of the Joomla exported content in a folder called `input` and a database prefix of `e4hy6`, you would use the following command:
 
 ``` shell
 j32md stats input e4hy6
 ```
 
-results
+The module will read the `e4hy6_categories.json` and `e4hy6_content.json` files and displays the record counts in the console as shown below:
 
 ``` text
 Database: my_cms
@@ -159,4 +165,3 @@ Table: e4hy3_content
  Categories 35
  Articles   515
 ```
-
