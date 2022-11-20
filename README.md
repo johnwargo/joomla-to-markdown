@@ -30,7 +30,7 @@ Using the supported commands listed in the following section.
 
 To use the module, you must complete the following steps to export your Joomla data and convert your article content to [Markdown](https://daringfireball.net/projects/markdown/) format:
 
-1. Using MySQL Admin (or your export tool of choice), export your site's `categories` table in JSON format to a local file.
+1. Using MySQL Admin (shoown below) or your export tool of choice export your site's `categories` table in JSON format to a local file.
 2. Export your site's `content` table in JDON format to a local file.
 3. Craft a template file (instructions below) that describes the format of the exported markdown file for each Joomla article.
 4. Execute the module's `export` command to convert the contents of the JSON files to individual markdown files for each article.
@@ -155,6 +155,29 @@ j32md clear output
 
 Use `export` or `e` for this command.
 
+``` yml
+---
+layout: post
+title:  {{title}}
+date:   2022-11-18 15:29:16 -0500
+categories: {{category_title}}
+---
+{{introtext}}
+```
+
+
+
+``` markdown
+---
+layout: post
+title:  Site Upgrade Coming
+date:   2022-11-18 15:29:16 -0500
+categories: "Miscellaneous"
+---
+This site runs on Joomla, since, I think, the Joomla 1.x days. The Joomla team recently released Joomla 4 and they're getting ready to shut down support for Joomla 3. In preparation for this, I removed the site map menu and upgraded the SEO engine.
+
+I haven't used attachments in this site in a long time, so I will soon delete the attachments plugin and update all articles that had attachments (10 articles). I'll put a notice on the top of each affected page and, if the attachment is still relevant, store it somewhere else and provide a link to the file's new location.
+```
 
 
 ### Statistics
