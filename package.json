@@ -67,9 +67,9 @@
   "engines": {
     "node": ">=12.0.0"
   },
-  "bugs": "https://github.com/johnwargo/joomla3-2-md/issues",
+  "bugs": "https://github.com/johnwargo/joomla-to-md/issues",
   "keywords": [
-    "oclif"
+    "oclif", "Joomla", "Markdown"
   ],
   "types": "dist/index.d.ts"
 }
