@@ -182,20 +182,38 @@ The export process adds two addtional fields to the article record that you can 
 
 In the example above, `category_title` is used to set the Jekyll post category.
 
+Now, with the template file in place, you're ready to export your Joomla articles to markdown files. In a terminal window, execute the following command
 
+``` shell
+j32md export sourceFolder joomlaDatabasePrefix destinationFolder templateFile
+```
+
+For example, with the following configuration:
+
+* The Joomla exported content JSON files in a folder called `input` 
+* The Joomla site's database prefix `e4hy6`
+* Output folder `output`
+* Template file name `jekyll.md`
+
+Use the following command:
+
+``` shell
+j32md export input e4hy6 output jekyll.md
+```
+
+The module will create a separate markdown file for each article defined in the exported `content` table; an example of a generated file looks like this:
 
 ``` markdown
 ---
 layout: post
 title:  Site Upgrade Coming
 date:   2022-11-18 15:29:16 -0500
-categories: "Miscellaneous"
+categories: Miscellaneous
 ---
 This site runs on Joomla, since, I think, the Joomla 1.x days. The Joomla team recently released Joomla 4 and they're getting ready to shut down support for Joomla 3. In preparation for this, I removed the site map menu and upgraded the SEO engine.
 
 I haven't used attachments in this site in a long time, so I will soon delete the attachments plugin and update all articles that had attachments (10 articles). I'll put a notice on the top of each affected page and, if the attachment is still relevant, store it somewhere else and provide a link to the file's new location.
 ```
-
 
 ### Statistics
 
@@ -227,3 +245,4 @@ Table: e4hy3_content
  Categories 35
  Articles   515
 ```
+
