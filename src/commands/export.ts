@@ -22,7 +22,7 @@ var strings = new Strings();
 var turndownService = new Turndown();
 var replacements: RegExpMatchArray[] = [];
 
-export default class Go extends Command {
+export default class Export extends Command {
   static summary = 'Export'
   static description = 'Export all articles as markdown files.'
   static aliases = ['e']
@@ -52,7 +52,7 @@ export default class Go extends Command {
   ]
 
   public async run(): Promise<void> {
-    const { args, flags } = await this.parse(Go)
+    const { args, flags } = await this.parse(Export)
 
     var template: string;
 
