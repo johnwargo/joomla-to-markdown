@@ -1,15 +1,15 @@
 {
   "name": "joomla-to-markdown",
   "version": "0.0.0",
-  "description": "Converted JSON Exported Joomla 3 content to markdown files",
+  "description": "Converted JSON Exported Joomla article content to markdown files",
   "author": "John M. Wargo @johnwargo",
   "bin": {
     "j2md": "./bin/run"
   },
-  "homepage": "https://github.com/johnwargo/joomla3-2-md",
+  "homepage": "https://github.com/johnwargo/joomla-to-md",
   "license": "MIT",
   "main": "dist/index.js",
-  "repository": "johnwargo/joomla3-2-md",
+  "repository": "johnwargo/joomla-to-md",
   "files": [
     "/bin",
     "/dist",
