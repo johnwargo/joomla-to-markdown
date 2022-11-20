@@ -106,12 +106,13 @@ export default class Export extends Command {
       if (articles.length > 0) {
         this.log(`Articles: ${articles.length.toLocaleString("en-US")}\n`)
         for (var article of articles) {
+          article.title = article.title.replace(/[\\/:"*?<>|]+/g, '');
           // Find the category title for this article
           var category: Category = <Category>categories.find(c => c.id === article.catid);
           // Set the category title and alias in the article object
           // category alias is (currently) used in the file name
           // strip colons from the title
-          article.category_title = category ? category.title.replace(/:/g,'') : 'Unknown';
+          article.category_title = category ? category.title.replace(/:/g, '') : 'Unknown';
           article.category_alias = category ? category.alias : 'unknown';
           if (args[strings.templateParam]) {
             ExportArticle(article, template, replacements, outputFolder);
@@ -157,8 +158,7 @@ async function ExportArticle(
   console.log(`\nExportArticle('${article.title}', template, '${outputFolder}', replacements)`);
   if (debug) console.dir(article);
   // convert the article body to markdown
-  article.introtext = turndownService.turndown(article.introtext);
-
+  article.introtext = turndownService.turndown(article.introtext);  
   // copy the template into the document body
   docBody = template;
   // process the replacements
