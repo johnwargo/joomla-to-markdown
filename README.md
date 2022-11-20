@@ -33,7 +33,7 @@ The following sections illustrate how to use to use each of the commands provide
 
 ### Articles
 
-Display a list of article information to the console; the module reads the `content` export file, parses the content then displays each article Id, Title, and Alias in a table.
+Display a list of article information to the console; the module reads the `content` export file, parses the content then displays each article Id, Title, and Alias in a table. Use this command to validate the contents of the `content` export.
 
 ``` shell
 j32md arts sourceFolder joomlaDatabasePrefix
@@ -76,7 +76,7 @@ Table: e4hy6_content
 
 ### Categories
 
-Display a list of category information to the console; the module reads the `categories` export file, parses the content then displays each article Id, Name, and Path in a table.
+Display a list of category information to the console; the module reads the `categories` export file, parses the content then displays each article Id, Name, and Path in a table. Use this command to validate the contents of the `categories` export.
 
 ``` shell
 j32md cats sourceFolder joomlaDatabasePrefix
@@ -92,6 +92,7 @@ j32md cats input e4hy6
 
 The module will read the `e4hy6_categories.json` file and display details for each category in a table as shown below:
 
+``` text
 Database: jmw_cms
 Table: e4hy6_categories
 
@@ -112,6 +113,7 @@ Table: e4hy6_categories
  14  Mobile Development         category-posts/category-mobile-development
  18  Posts                      category-posts
  -----------------------------------------------------------------------------------------
+```
 
 ### Clear
 
