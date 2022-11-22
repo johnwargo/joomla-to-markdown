@@ -1,4 +1,5 @@
 export default class Strings {
+  configFileName = 'j2md.json';
   exportFolderDescription = 'The folder location for exported markdown files; use . for current folder.';
   outputFolderParam = 'outputFolder';
   outputFolderDescription = 'The target folder for the exported articles files (markdown format).';
