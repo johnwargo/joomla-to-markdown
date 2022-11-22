@@ -12,10 +12,6 @@ export default class AutoExport extends Command {
   public async run(): Promise<void> {
     const {args, flags} = await this.parse(AutoExport)
 
-    const name = flags.name ?? 'world'
-    this.log(`hello ${name} from D:\\dev\\node\\joomla-to-markdown\\src\\commands\\auto\\export.ts`)
-    if (args.file && flags.force) {
-      this.log(`you input --force and --file: ${args.file}`)
-    }
+   
   }
 }
