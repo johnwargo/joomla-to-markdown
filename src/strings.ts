@@ -1,6 +1,8 @@
 export default class Strings {
   configFileName = 'j2md.json';
   exportFolderDescription = 'The folder location for exported markdown files; use . for current folder.';
+  gmtOffsetParameter = 'gmtOffset';
+  gmtOffsetDescription = 'The GMT offset to use when converting dates to local time. Defaults to 0.';
   outputFolderParam = 'outputFolder';
   outputFolderDescription = 'The target folder for the exported articles files (markdown format).';
   prefixParam = 'prefix';

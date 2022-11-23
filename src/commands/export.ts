@@ -7,6 +7,7 @@
 
 // export the articles
 import { Command, Flags } from '@oclif/core'
+var format = require('date-fns/format')
 import fs = require('fs');
 import path = require('path');
 import Turndown = require('turndown');
@@ -49,6 +50,11 @@ export default class Export extends Command {
       name: strings.templateParam,
       description: strings.templateDescription,
       required: false
+    },
+    {
+      name: strings.gmtOffsetParameter,
+      description: strings.gmtOffsetDescription,
+      required: false
     }
   ]
 
@@ -56,6 +62,7 @@ export default class Export extends Command {
     const { args, flags } = await this.parse(Export)
 
     var template: string;
+    var gmtOffset: number = 0;
 
     return new Promise((resolve, reject) => {
 
@@ -88,6 +95,12 @@ export default class Export extends Command {
           this.error('Template file contains no replacement tokens, please correct the file and try again.');
         }
         console.dir(replacements);
+
+        if (args[strings.gmtOffsetParameter]) {
+          this.log('has offset');
+          gmtOffset = parseInt(args[strings.gmtOffsetParameter]);
+          if (flags.debug) this.log(`GMT Offset: ${gmtOffset}`);
+        }
       }
 
       // start by getting the categories
@@ -115,7 +128,13 @@ export default class Export extends Command {
           if (confirmExport) {
             this.log('Exporting articles...');
             for (var article of articles) {
+              // Strip invalid characters from the article title
               article.title = article.title.replace(/[\\/:"*?<>|]+/g, '');
+              // Adjust the created date (if needed)
+              if (gmtOffset != 0) {
+                article.created = article.created + " " + calculateOffsetString(gmtOffset);
+              }
+
               // Find the category title for this article
               var category: Category = <Category>categories.find(c => c.id === article.catid);
               // Set the category title and alias in the article object
@@ -140,7 +159,14 @@ export default class Export extends Command {
     });
   }
 }
-function zeroPad(tmpVal: string): string {
+
+function calculateOffsetString(offset: number): string {
+  const isNegative = offset < 0;
+  const offsetValStr = (Math.abs(offset) * 100).toString().padStart(4, '0');
+  return isNegative ? '-' + offsetValStr : offsetValStr;
+}
+
+function zeroPad(tmpVal: number): string {
   return tmpVal.toString().padStart(2, '0');
 }
 
