@@ -228,6 +228,26 @@ The module will create a separate markdown file for each article defined in the 
 ---
 layout: post
 title:  Site Upgrade Coming
+date:   2022-11-18 15:29:16
+categories: Miscellaneous
+---
+This site runs on Joomla, since, I think, the Joomla 1.x days. The Joomla team recently released Joomla 4 and they're getting ready to shut down support for Joomla 3. In preparation for this, I removed the site map menu and upgraded the SEO engine.
+
+I haven't used attachments in this site in a long time, so I will soon delete the attachments plugin and update all articles that had attachments (10 articles). I'll put a notice on the top of each affected page and, if the attachment is still relevant, store it somewhere else and provide a link to the file's new location.
+```
+
+The sample post Jekyll creates for a new site has a GMT offset added to the create date field. To add this to exported markdown files, add a GMT offset to the `export` command as shown in the follwing example:
+
+``` shell
+j32md export input e4hy6 output jekyll.md -5
+```
+
+This will add `-0500` to the date field as shown in the following example markdown file:
+
+``` markdown
+---
+layout: post
+title:  Site Upgrade Coming
 date:   2022-11-18 15:29:16 -0500
 categories: Miscellaneous
 ---

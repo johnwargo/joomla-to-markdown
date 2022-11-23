@@ -134,7 +134,6 @@ export default class Export extends Command {
               if (gmtOffset != 0) {
                 article.created = article.created + " " + calculateOffsetString(gmtOffset);
               }
-
               // Find the category title for this article
               var category: Category = <Category>categories.find(c => c.id === article.catid);
               // Set the category title and alias in the article object
