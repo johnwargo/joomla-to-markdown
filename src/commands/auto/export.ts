@@ -52,24 +52,38 @@ export default class AutoExport extends Command {
     validationResult = { result: true, message: '\nConfiguration validation encountered the following errors:\n' };
 
     for (var validation of validations) {
-      if (validation.isRequired) {
-        // @ts-ignore
-        var propertyValue = config[validation.propertyName];
-        if (debug) this.log(`Checking for required property: '${validation.propertyName}'`);
-        if (propertyValue.length > 0) {
-          // we have a value, is it a file path?
-          if (validation.isFilePath) {
-            const filePath = path.join('./', propertyValue);
-            if (!fs.existsSync(filePath)) {
-              validationResult.result = false;
-              validationResult.message += `\n${validation.propertyName} is not a valid file/path.`;
-            }
-          } else {
+
+      if (debug) console.dir(validation);
+
+      if (debug) this.log(`Validating '${validation.propertyName}'`);
+      // @ts-ignore
+      var propertyValue = config[validation.propertyName];
+      if (debug) this.log(`Property value: '${propertyValue}'`);
+
+      if (propertyValue) {
+
+        // is it a required field?
+        if (validation.isRequired && propertyValue.length < 1) {
+          validationResult.result = false;
+          validationResult.message += `\nThe '${validation.propertyName}' property is required, but not defined.`;
+        } else {
+          if (debug) this.log(`${validation.propertyName} is empty, but not required`);
+        }
+
+
+        // we have a value, is it a file path?
+        if (validation.isFilePath) {
+          const filePath = path.join('./', propertyValue);
+          if (!fs.existsSync(filePath)) {
             validationResult.result = false;
-            validationResult.message += `\nThe '${validation.propertyName}' property is required but is not defined.`;
+            validationResult.message += `\n${validation.propertyName} is not a valid file/path.`;
           }
         }
+      } else {
+        validationResult.result = false;
+        validationResult.message += `\nUnable to read value for '${validation.propertyName}'.`;
       }
+
     }
     return validationResult;
   }
