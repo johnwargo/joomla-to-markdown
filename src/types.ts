@@ -75,7 +75,7 @@ export type Article = {
   alias: string;
   introtext: string;
   fulltext: string;
-  state: string;  
+  state: string;
   catid: string;
   created: string;
   created_by: string;
@@ -205,3 +205,20 @@ export type ArticleMetadata = {
 //   "note": ""
 // }
 
+// ====================================================
+// Config Types
+// ====================================================
+
+export type ConfigObject = {
+  joomlaDatabasePrefix: string;
+  inputFolder: string;
+  outputFolder: string;
+  templateFileName: string;
+  gmtOffset: number;
+}
+
+export type ConfigValidation = {
+  propertyName: string;
+  isRequired: boolean;
+  isFilePath: boolean;
+}

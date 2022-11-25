@@ -12,11 +12,12 @@ import path = require('path');
 
 // internal modules
 import Strings from '../../strings'
+import { ConfigObject } from '../../types';
 
 // Create some objects we need to do our work
 var strings = new Strings();
 
-const configObject = {
+const configObject: ConfigObject = {
   joomlaDatabasePrefix: "",
   inputFolder: ".",
   outputFolder: ".",

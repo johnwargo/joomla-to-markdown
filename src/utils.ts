@@ -158,7 +158,6 @@ export function exportGenericArticle(
 
 function buildOutputFileName(title: string, articleDate: string, debug: boolean = false): string {
   // replace spaces with dashes (kill extra spaces first)
-
   // @ts-ignore
   var tempTitle = title.toLowerCase().replaceAll('  ', ' ').replaceAll(' ', '-');
   if (debug) console.log(`Temp Title: ${tempTitle}`);

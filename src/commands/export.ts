@@ -15,8 +15,7 @@ const yesno = require('yesno');
 // internal modules
 import { exportTemplateArticle, getArticles, getCategories, exportGenericArticle } from '../utils'
 import { Article, Category } from '../types';
-import Strings from '../strings'
-import { utils } from 'mocha';
+import Strings from '../strings';
 
 // Create some objects we need to do our work
 var strings = new Strings();
