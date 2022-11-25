@@ -31,9 +31,7 @@ export function getCategories(inputFolder: string, prefix: string, debug: boolea
         if (obj.type == 'table') {
           console.log(`Database: ${obj.database}`);
           console.log(`Table: ${obj.name}`);
-          categories = obj.data;
-          // const catsData = obj.data
-          // for (var category of catsData) categories.push(category);
+          categories = obj.data;          
         }
       }
     } else {
@@ -66,18 +64,7 @@ export function getArticles(inputFolder: string, prefix: string, debug: boolean 
         if (obj.type == 'table') {
           console.log(`Database: ${obj.database}`)
           console.log(`Table: ${obj.name}`)
-          articles = obj.data;
-          // const artsData = obj.data
-          // for (var article of artsData) {
-          //   articles.push({
-          //     idx: parseInt(article.id),
-          //     catIdx: parseInt(article.catid),
-          //     name: article.title,
-          //     alias: article.alias,
-          //     created: article.created,
-          //     body: article.introtext,
-          //   })
-          // }
+          articles = obj.data;          
         }
       }
     } else {
@@ -90,7 +77,7 @@ export function getArticles(inputFolder: string, prefix: string, debug: boolean 
   return articles
 }
 
-export function exportArticle(
+export function exportTemplateArticle(
   article: Article,
   template: string,
   replacements: RegExpMatchArray[],
@@ -135,7 +122,7 @@ export function exportArticle(
   fs.writeFileSync(outputFileName, docBody, {});
 }
 
-export function writeGenericArticle(
+export function exportGenericArticle(
   article: Article,
   outputFolder: string,
   debug: boolean = false) {
@@ -150,15 +137,17 @@ export function writeGenericArticle(
   }
 
   console.log(`writeArticle('${article.title}', '${outputFolder}')`);
+  // figure out the output file name
   var outputFileName = path.join(outputFolder, buildOutputFileName(article.title, article.created));
   console.log(`Output File: '${outputFileName}'\n`);
+  // build the file content
   var docBody = threeDashes;
-  docBody += buildFileString('Title', article.title);
-  docBody += buildFileString('ID', article.id.toString());
-  docBody += buildFileString('Alias', article.alias);
-  docBody += buildFileString('Category', article.category_title!);
-  docBody += buildFileString('Category ID', article.catid);
-  docBody += buildFileString('Created', article.created);
+  docBody += buildFileString('Title', article.title, debug);
+  docBody += buildFileString('ID', article.id.toString(), debug);
+  docBody += buildFileString('Alias', article.alias, debug);
+  docBody += buildFileString('Category', article.category_title!, debug);
+  docBody += buildFileString('Category ID', article.catid, debug);
+  docBody += buildFileString('Created', article.created, debug);
   docBody += threeDashes;
   // convert the article body to markdown
   var markdownBody = turndownService.turndown(article.introtext);
@@ -167,9 +156,12 @@ export function writeGenericArticle(
   fs.writeFileSync(outputFileName, docBody, {});
 }
 
-function buildOutputFileName(title: string, articleDate: string): string {
-  // replace spaces with dashes
-  var tempTitle = title.trim().toLowerCase().replace(/[\\/:"*?<>|]+/g, '');
+function buildOutputFileName(title: string, articleDate: string, debug: boolean = false): string {
+  // replace spaces with dashes (kill extra spaces first)
+
+  // @ts-ignore
+  var tempTitle = title.toLowerCase().replaceAll('  ', ' ').replaceAll(' ', '-');
+  if (debug) console.log(`Temp Title: ${tempTitle}`);
   // convert the date string into a Date/Time object
   var tempDate = parseJSON(articleDate);
   // build the file name

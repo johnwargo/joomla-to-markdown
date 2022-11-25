@@ -13,7 +13,7 @@ import path = require('path');
 const yesno = require('yesno');
 
 // internal modules
-import { exportArticle, getArticles, getCategories, writeGenericArticle } from '../utils'
+import { exportTemplateArticle, getArticles, getCategories, exportGenericArticle } from '../utils'
 import { Article, Category } from '../types';
 import Strings from '../strings'
 import { utils } from 'mocha';
@@ -63,6 +63,8 @@ export default class Export extends Command {
     var gmtOffset: number = 0;
 
     return new Promise((resolve, reject) => {
+
+      if (flags.debug) this.log('Debug mode enabled');
 
       this.log(`\nValidating Input Parameters\n===========================`);
       // does the export folder exist? (it should, I don't want to have to worry about creating it)      
@@ -127,7 +129,7 @@ export default class Export extends Command {
             this.log('Exporting articles...');
             for (var article of articles) {
               // Strip invalid characters from the article title
-              article.title = article.title.replace(/[\\/:"*?<>|]+/g, '');
+              article.title = article.title.trim().replace(/[\\/:"*?!<>|]+/g, '');
               // Adjust the created date (if needed)
               if (gmtOffset != 0) {
                 article.created = article.created + " " + calculateOffsetString(gmtOffset);
@@ -140,9 +142,9 @@ export default class Export extends Command {
               article.category_title = category ? category.title.replace(/:/g, '') : 'Unknown';
               article.category_alias = category ? category.alias : 'unknown';
               if (args[strings.templateParam]) {
-                exportArticle(article, template, replacements, outputFolder);
+                exportTemplateArticle(article, template, replacements, outputFolder, flags.debug);
               } else {
-                writeGenericArticle(article, outputFolder);
+                exportGenericArticle(article, outputFolder, flags.debug);
               }
             }
           } else {
