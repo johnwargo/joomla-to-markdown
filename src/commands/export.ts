@@ -10,18 +10,16 @@ import { Command, Flags } from '@oclif/core'
 var format = require('date-fns/format')
 import fs = require('fs');
 import path = require('path');
-import Turndown = require('turndown');
-var parseJSON = require('date-fns/parseJSON');
 const yesno = require('yesno');
 
 // internal modules
-import { getArticles, getCategories } from '../utils'
+import { exportArticle, getArticles, getCategories, writeGenericArticle } from '../utils'
 import { Article, Category } from '../types';
 import Strings from '../strings'
+import { utils } from 'mocha';
 
 // Create some objects we need to do our work
 var strings = new Strings();
-var turndownService = new Turndown();
 var replacements: RegExpMatchArray[] = [];
 
 export default class Export extends Command {
@@ -142,9 +140,9 @@ export default class Export extends Command {
               article.category_title = category ? category.title.replace(/:/g, '') : 'Unknown';
               article.category_alias = category ? category.alias : 'unknown';
               if (args[strings.templateParam]) {
-                ExportArticle(article, template, replacements, outputFolder);
+                exportArticle(article, template, replacements, outputFolder);
               } else {
-                writeArticle(article, outputFolder);
+                writeGenericArticle(article, outputFolder);
               }
             }
           } else {
@@ -157,102 +155,4 @@ export default class Export extends Command {
       resolve();  // we made it this far, so resolve the promise
     });
   }
-}
-
-function calculateOffsetString(offset: number): string {
-  const isNegative = offset < 0;
-  const offsetValStr = (Math.abs(offset) * 100).toString().padStart(4, '0');
-  return isNegative ? '-' + offsetValStr : offsetValStr;
-}
-
-function zeroPad(tmpVal: number): string {
-  return tmpVal.toString().padStart(2, '0');
-}
-
-function fixFileName(fileName: string): string {
-  // remove forbidden characters from the file name
-  return fileName.trim().toLowerCase().replace(/[\\/:"*?<>|]+/g, '');
-}
-
-function buildJekyllFileName(title: string, articleDate: string): string {
-  // replace spaces with dashes
-  var tempTitle = fixFileName(title).replace(/\s+/g, '-');
-  // convert the date string into a Date/Time object
-  var tempDate = parseJSON(articleDate);
-  // build the file name
-  return `${tempDate.getFullYear()}-${zeroPad(tempDate.getMonth() + 1)}-${zeroPad(tempDate.getDate())}-${tempTitle}.md`;
-}
-
-async function ExportArticle(
-  article: Article,
-  template: string,
-  replacements: RegExpMatchArray[],
-  outputFolder: string,
-  debug: boolean = false) {
-
-  var docBody: string;
-
-  console.log(`\nExportArticle('${article.title}', template, '${outputFolder}', replacements)`);
-  if (debug) console.dir(article);
-  // convert the article body to markdown
-  article.introtext = turndownService.turndown(article.introtext);
-  // copy the template into the document body
-  docBody = template;
-  // process the replacements
-  for (var replacement of replacements) {
-    // just in case the template uses mixed case for this property
-    var searchText: string = replacement.toString().toLowerCase();
-    // strip the braces and any errant spaces
-    var propertyName: string = searchText.replace('{{', '').replace('}}', '').trim();
-    // get the value of the property
-    // @ts-ignore
-    var propertyValue: string = article[propertyName];
-
-    if (debug) {
-      console.log(`Category Title: ${article.category_title}`);
-      console.log(`\nSearch Text: ${searchText}, property name: ${propertyName}, replace with '${propertyValue}'`);
-    }
-
-    if (propertyValue) {
-      // @ts-ignore
-      docBody = docBody.replaceAll(searchText, propertyValue);
-    }
-  }
-
-  if (debug) console.dir(docBody);
-
-  // Calculate the output file name  
-  var outputFileName = path.join(outputFolder, buildJekyllFileName(article.title, article.created));
-  outputFileName = outputFileName
-  console.log(`Writing file '${outputFileName}'\n`);
-  // write the body to the file
-  fs.writeFileSync(outputFileName, docBody, {});
-}
-
-async function writeArticle(
-  article: Article,
-  outputFolder: string,
-  debug: boolean = false) {
-  const crlf = '\r\n';
-  function buildFileString(heading: string, text: string): string {
-    return `**${heading.trim()}:** ${text}${crlf}`;
-  }
-
-  console.log(`writeArticle('${article.title}', '${outputFolder}')`);
-  var outputFileName = path.join(outputFolder, fixFileName(`${article.category_alias}-${article.alias}.md`));
-  outputFileName = outputFileName.replace(/[\:"*?<>|]+/g, '');
-  console.log(`Output File: '${outputFileName}'\n`);
-  var docBody = '';
-  docBody += buildFileString('Title', article.title);
-  docBody += buildFileString('ID', article.id.toString());
-  docBody += buildFileString('Alias', article.alias);
-  docBody += buildFileString('Category', article.category_title!);
-  docBody += buildFileString('Category ID', article.catid);
-  docBody += buildFileString('Created', article.created);
-  docBody += crlf;
-  // convert the article body to markdown
-  var markdownBody = turndownService.turndown(article.introtext);
-  docBody += markdownBody;
-  // write the body to the file
-  fs.writeFileSync(outputFileName, docBody, {});
 }

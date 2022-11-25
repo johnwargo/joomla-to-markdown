@@ -1,9 +1,14 @@
 import fs = require('fs');
 import path = require('path');
+var parseJSON = require('date-fns/parseJSON');
+import Turndown = require('turndown');
+
 import { Article, Category } from './types';
 
 const catFileRoot: string = "_categories.json"
 const artFileRoot: string = "_content.json"
+
+var turndownService = new Turndown();
 
 export function getCategories(inputFolder: string, prefix: string, debug: boolean = false): Category[] {
 
@@ -83,6 +88,102 @@ export function getArticles(inputFolder: string, prefix: string, debug: boolean 
   }
   // no need to sort the articles?
   return articles
+}
+
+export function exportArticle(
+  article: Article,
+  template: string,
+  replacements: RegExpMatchArray[],
+  outputFolder: string,
+  debug: boolean = false) {
+
+  var docBody: string;
+
+  console.log(`\nExportArticle('${article.title}', template, '${outputFolder}', replacements)`);
+  if (debug) console.dir(article);
+  // convert the article body to markdown
+  article.introtext = turndownService.turndown(article.introtext);
+  // copy the template into the document body
+  docBody = template;
+  // process the replacements
+  for (var replacement of replacements) {
+    // just in case the template uses mixed case for this property
+    var searchText: string = replacement.toString().toLowerCase();
+    // strip the braces and any errant spaces
+    var propertyName: string = searchText.replace('{{', '').replace('}}', '').trim();
+    // get the value of the property
+    // @ts-ignore
+    var propertyValue: string = article[propertyName];
+
+    if (debug) {
+      console.log(`Category Title: ${article.category_title}`);
+      console.log(`\nSearch Text: ${searchText}, property name: ${propertyName}, replace with '${propertyValue}'`);
+    }
+
+    if (propertyValue) {
+      // @ts-ignore
+      docBody = docBody.replaceAll(searchText, propertyValue);
+    }
+  }
+
+  if (debug) console.dir(docBody);
+
+  // Calculate the output file name  
+  var outputFileName = path.join(outputFolder, buildOutputFileName(article.title, article.created));
+  console.log(`Writing file '${outputFileName}'\n`);
+  // write the body to the file
+  fs.writeFileSync(outputFileName, docBody, {});
+}
+
+export function writeGenericArticle(
+  article: Article,
+  outputFolder: string,
+  debug: boolean = false) {
+
+  const crlf = '\r\n';
+  const threeDashes = '---' + crlf;
+
+  function buildFileString(heading: string, text: string, debug: boolean = false): string {
+    var tmpStr = `${heading.trim()}: ${text}${crlf}`
+    if (debug) console.log(tmpStr);
+    return tmpStr;
+  }
+
+  console.log(`writeArticle('${article.title}', '${outputFolder}')`);
+  var outputFileName = path.join(outputFolder, buildOutputFileName(article.title, article.created));
+  console.log(`Output File: '${outputFileName}'\n`);
+  var docBody = threeDashes;
+  docBody += buildFileString('Title', article.title);
+  docBody += buildFileString('ID', article.id.toString());
+  docBody += buildFileString('Alias', article.alias);
+  docBody += buildFileString('Category', article.category_title!);
+  docBody += buildFileString('Category ID', article.catid);
+  docBody += buildFileString('Created', article.created);
+  docBody += threeDashes;
+  // convert the article body to markdown
+  var markdownBody = turndownService.turndown(article.introtext);
+  docBody += markdownBody;
+  // write the body to the file
+  fs.writeFileSync(outputFileName, docBody, {});
+}
+
+function buildOutputFileName(title: string, articleDate: string): string {
+  // replace spaces with dashes
+  var tempTitle = title.trim().toLowerCase().replace(/[\\/:"*?<>|]+/g, '');
+  // convert the date string into a Date/Time object
+  var tempDate = parseJSON(articleDate);
+  // build the file name
+  return `${tempDate.getFullYear()}-${zeroPad(tempDate.getMonth() + 1)}-${zeroPad(tempDate.getDate())}-${tempTitle}.md`;
+}
+
+function calculateOffsetString(offset: number): string {
+  const isNegative = offset < 0;
+  const offsetValStr = (Math.abs(offset) * 100).toString().padStart(4, '0');
+  return isNegative ? '-' + offsetValStr : offsetValStr;
+}
+
+function zeroPad(tmpVal: number, numChars: number = 2): string {
+  return tmpVal.toString().padStart(numChars, '0');
 }
 
 function compareFunction(a: any, b: any) {
