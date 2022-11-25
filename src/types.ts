@@ -1,4 +1,22 @@
 // ====================================================
+// Config Types
+// ====================================================
+
+export type ConfigObject = {
+  joomlaDatabasePrefix: string;
+  inputFolder: string;
+  outputFolder: string;
+  templateFileName: string;
+  gmtOffset: number;
+}
+
+export type ConfigValidation = {
+  propertyName: string;
+  isRequired: boolean;
+  isFilePath: boolean;
+}
+
+// ====================================================
 // Category Type
 // ====================================================
 
@@ -204,21 +222,3 @@ export type ArticleMetadata = {
 //   "xreference": "",
 //   "note": ""
 // }
-
-// ====================================================
-// Config Types
-// ====================================================
-
-export type ConfigObject = {
-  joomlaDatabasePrefix: string;
-  inputFolder: string;
-  outputFolder: string;
-  templateFileName: string;
-  gmtOffset: number;
-}
-
-export type ConfigValidation = {
-  propertyName: string;
-  isRequired: boolean;
-  isFilePath: boolean;
-}

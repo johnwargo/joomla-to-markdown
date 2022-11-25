@@ -24,7 +24,7 @@ var strings = new Strings();
 //   ifFilePath: boolean;
 // }
 
-const configValidations: ConfigValidation[] = [
+const validations: ConfigValidation[] = [
   { propertyName: 'joomlaDatabasePrefix', isRequired: true, isFilePath: false },
   { propertyName: 'inputFolder', isRequired: true, isFilePath: true },
   { propertyName: 'outputFolder', isRequired: true, isFilePath: true },
@@ -32,7 +32,7 @@ const configValidations: ConfigValidation[] = [
   { propertyName: 'gmtOffset', isRequired: false, isFilePath: false },
 ];
 
-type ConfigResult = {
+type ValidationResult = {
   result: boolean;
   message: string;
 }
@@ -46,14 +46,32 @@ export default class AutoExport extends Command {
   static flags = { debug: Flags.boolean({ char: 'd' }) };
   static args = [];
 
-  validateConfig(config: ConfigObject): ConfigResult {
+  validateConfig(config: ConfigObject, debug: boolean = false): ValidationResult {
 
-    var msgCount = 0;
-    var configResult: ConfigResult;
-    configResult = { result: true, message: '\nConfiguration validation encountered the following errors:\n' };
+    var validationResult: ValidationResult;
+    validationResult = { result: true, message: '\nConfiguration validation encountered the following errors:\n' };
 
-
-    return configResult;
+    for (var validation of validations) {
+      if (validation.isRequired) {
+        // @ts-ignore
+        var propertyValue = config[validation.propertyName];
+        if (debug) this.log(`Checking for required property: '${validation.propertyName}'`);
+        if (propertyValue.length > 0) {
+          // we have a value, is it a file path?
+          if (validation.isFilePath) {
+            const filePath = path.join('./', propertyValue);
+            if (!fs.existsSync(filePath)) {
+              validationResult.result = false;
+              validationResult.message += `\n${validation.propertyName} is not a valid file/path.`;
+            }
+          } else {
+            validationResult.result = false;
+            validationResult.message += `\nThe '${validation.propertyName}' property is required but is not defined.`;
+          }
+        }
+      }
+    }
+    return validationResult;
   }
 
   public async run(): Promise<void> {
@@ -83,9 +101,9 @@ export default class AutoExport extends Command {
     }
 
     // Check the config file for required properties
-    const validationResult: ConfigResult = this.validateConfig(Config);
+    const validationResult: ValidationResult = this.validateConfig(Config, debug);
     if (validationResult.result) {
-      if (debug) this.log('\nConfiguration validation passed');
+      if (debug) this.log('\nConfiguration validation passed!');
       // Process the Export
     } else {
       this.error(validationResult.message);
