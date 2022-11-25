@@ -29,7 +29,7 @@ const validations: ConfigValidation[] = [
   { propertyName: 'inputFolder', isRequired: true, isFilePath: true },
   { propertyName: 'outputFolder', isRequired: true, isFilePath: true },
   { propertyName: 'templateFileName', isRequired: true, isFilePath: true },
-  { propertyName: 'gmtOffset', isRequired: false, isFilePath: false },
+  { propertyName: 'gmtOffset', isRequired: true, isFilePath: false },
 ];
 
 type ValidationResult = {
@@ -49,41 +49,36 @@ export default class AutoExport extends Command {
   validateConfig(config: ConfigObject, debug: boolean = false): ValidationResult {
 
     var validationResult: ValidationResult;
-    validationResult = { result: true, message: '\nConfiguration validation encountered the following errors:\n' };
+    validationResult = { result: true, message: 'Configuration validation encountered the following error(s):\n' };
 
     for (var validation of validations) {
 
       if (debug) console.dir(validation);
+      if (debug) this.log(`\nValidating '${validation.propertyName}'`);
 
-      if (debug) this.log(`Validating '${validation.propertyName}'`);
       // @ts-ignore
-      var propertyValue = config[validation.propertyName];
+      var propertyValue: string = config[validation.propertyName];
       if (debug) this.log(`Property value: '${propertyValue}'`);
-
+      // Do we have a value?
       if (propertyValue) {
-
         // is it a required field?
-        if (validation.isRequired && propertyValue.length < 1) {
+        if (validation.isRequired && propertyValue.toString().length < 1) {
           validationResult.result = false;
           validationResult.message += `\nThe '${validation.propertyName}' property is required, but not defined.`;
-        } else {
-          if (debug) this.log(`${validation.propertyName} is empty, but not required`);
-        }
-
-
-        // we have a value, is it a file path?
-        if (validation.isFilePath) {
+        } 
+        
+        // is it a file path?
+        if (validation.isFilePath && propertyValue.length > 0) {
           const filePath = path.join('./', propertyValue);
           if (!fs.existsSync(filePath)) {
             validationResult.result = false;
-            validationResult.message += `\n${validation.propertyName} is not a valid file/path.`;
+            validationResult.message += `\nThe '${validation.propertyName}' value '${propertyValue}' is not a valid file/path.`;
           }
         }
       } else {
         validationResult.result = false;
         validationResult.message += `\nUnable to read value for '${validation.propertyName}'.`;
       }
-
     }
     return validationResult;
   }
@@ -109,7 +104,7 @@ export default class AutoExport extends Command {
     this.log('Reading config file...');
     var Config = await readJsonFile(configFilePath) as ConfigObject;
     if (Config) {
-      console.dir(Config)
+      if (debug) console.dir(Config);
     } else {
       this.error(`Unable to read the configuration file, please check the file and try again.`);
     }
@@ -117,7 +112,7 @@ export default class AutoExport extends Command {
     // Check the config file for required properties
     const validationResult: ValidationResult = this.validateConfig(Config, debug);
     if (validationResult.result) {
-      if (debug) this.log('\nConfiguration validation passed!');
+      this.log('Configuration validated');
       // Process the Export
     } else {
       this.error(validationResult.message);
