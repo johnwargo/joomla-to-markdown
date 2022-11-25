@@ -156,3 +156,9 @@ export default class Export extends Command {
     });
   }
 }
+
+function calculateOffsetString(offset: number): string {
+  const isNegative = offset < 0;
+  const offsetValStr = (Math.abs(offset) * 100).toString().padStart(4, '0');
+  return isNegative ? '-' + offsetValStr : offsetValStr;
+}

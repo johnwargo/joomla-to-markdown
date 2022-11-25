@@ -176,12 +176,6 @@ function buildOutputFileName(title: string, articleDate: string): string {
   return `${tempDate.getFullYear()}-${zeroPad(tempDate.getMonth() + 1)}-${zeroPad(tempDate.getDate())}-${tempTitle}.md`;
 }
 
-function calculateOffsetString(offset: number): string {
-  const isNegative = offset < 0;
-  const offsetValStr = (Math.abs(offset) * 100).toString().padStart(4, '0');
-  return isNegative ? '-' + offsetValStr : offsetValStr;
-}
-
 function zeroPad(tmpVal: number, numChars: number = 2): string {
   return tmpVal.toString().padStart(numChars, '0');
 }
