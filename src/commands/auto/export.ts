@@ -5,37 +5,10 @@ import path = require('path');
 const yesno = require('yesno');
 
 import Strings from '../../strings';
-import { ConfigObject, ConfigValidation } from '../../types';
+import { ConfigObject, ProcessResult } from '../../types';
 
 // Create some objects we need to do our work
 var strings = new Strings();
-
-// export type ConfigObject = {
-//   joomlaDatabasePrefix: string;
-//   inputFolder: string;
-//   outputFolder: string;
-//   templateFileName: string;
-//   gmtOffset: number;
-// }
-
-// export type ConfigValidation = {
-//   propertyName: string;
-//   isRequired: boolean;
-//   ifFilePath: boolean;
-// }
-
-const validations: ConfigValidation[] = [
-  { propertyName: 'joomlaDatabasePrefix', isRequired: true, isFilePath: false },
-  { propertyName: 'inputFolder', isRequired: true, isFilePath: true },
-  { propertyName: 'outputFolder', isRequired: true, isFilePath: true },
-  { propertyName: 'templateFileName', isRequired: true, isFilePath: true },
-  { propertyName: 'gmtOffset', isRequired: true, isFilePath: false },
-];
-
-type ValidationResult = {
-  result: boolean;
-  message: string;
-}
 
 export default class AutoExport extends Command {
   static summary = 'Auto Export';
@@ -46,50 +19,13 @@ export default class AutoExport extends Command {
   static flags = { debug: Flags.boolean({ char: 'd' }) };
   static args = [];
 
-  validateConfig(config: ConfigObject, debug: boolean = false): ValidationResult {
-
-    var validationResult: ValidationResult;
-    validationResult = { result: true, message: 'Configuration validation encountered the following error(s):\n' };
-
-    for (var validation of validations) {
-
-      if (debug) console.dir(validation);
-      if (debug) this.log(`\nValidating '${validation.propertyName}'`);
-
-      // @ts-ignore
-      var propertyValue: string = config[validation.propertyName];
-      if (debug) this.log(`Property value: '${propertyValue}'`);
-      // Do we have a value?
-      if (propertyValue) {
-        // is it a required field?
-        if (validation.isRequired && propertyValue.toString().length < 1) {
-          validationResult.result = false;
-          validationResult.message += `\nThe '${validation.propertyName}' property is required, but not defined.`;
-        } 
-        
-        // is it a file path?
-        if (validation.isFilePath && propertyValue.length > 0) {
-          const filePath = path.join('./', propertyValue);
-          if (!fs.existsSync(filePath)) {
-            validationResult.result = false;
-            validationResult.message += `\nThe '${validation.propertyName}' value '${propertyValue}' is not a valid file/path.`;
-          }
-        }
-      } else {
-        validationResult.result = false;
-        validationResult.message += `\nUnable to read value for '${validation.propertyName}'.`;
-      }
-    }
-    return validationResult;
-  }
+  
 
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(AutoExport);
 
     const configFileMessageRoot = 'The configuration file';
     const debug: boolean = flags.debug || false;
-
-    if (debug) this.log('\nDebug mode enabled\n');
 
     // does the config file exist?    
     const configFilePath = path.join('./', strings.configFileName);
@@ -102,21 +38,14 @@ export default class AutoExport extends Command {
 
     // read the config file
     this.log('Reading config file...');
-    var Config = await readJsonFile(configFilePath) as ConfigObject;
-    if (Config) {
-      if (debug) console.dir(Config);
+    var config = await readJsonFile(configFilePath) as ConfigObject;
+    if (config) {
+      if (debug) console.dir(config);
     } else {
       this.error(`Unable to read the configuration file, please check the file and try again.`);
     }
 
-    // Check the config file for required properties
-    const validationResult: ValidationResult = this.validateConfig(Config, debug);
-    if (validationResult.result) {
-      this.log('Configuration validated');
-      // Process the Export
-    } else {
-      this.error(validationResult.message);
-    }
+    
   }
 }
 

@@ -1,13 +1,19 @@
+
+export type ProcessResult = {
+  result: boolean;
+  message: string;
+}
+
 // ====================================================
 // Config Types
 // ====================================================
 
 export type ConfigObject = {
-  joomlaDatabasePrefix: string;
+  databasePrefix: string;
   inputFolder: string;
   outputFolder: string;
-  templateFileName: string;
-  gmtOffset: number;
+  templateFileName?: string;
+  gmtOffset?: number;
 }
 
 export type ConfigValidation = {

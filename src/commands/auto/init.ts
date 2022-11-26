@@ -18,7 +18,7 @@ import { ConfigObject } from '../../types';
 var strings = new Strings();
 
 const configObject: ConfigObject = {
-  joomlaDatabasePrefix: "",
+  databasePrefix: "",
   inputFolder: ".",
   outputFolder: ".",
   templateFileName: "",
