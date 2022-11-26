@@ -57,7 +57,7 @@ export default class Export extends Command {
     const { args, flags } = await this.parse(Export)
 
     return new Promise((resolve, reject) => {
-          
+
       var configObject: ConfigObject = {
         databasePrefix: args[strings.prefixParam],
         inputFolder: args[strings.sourceFolderParam],
@@ -65,13 +65,15 @@ export default class Export extends Command {
         templateFileName: args[strings.templateParam] || '',
         gmtOffset: args[strings.gmtOffsetParameter] || 0,
       }
-      
+
       processExport(configObject, flags.debug)
-        .then((result: ProcessResult) => {
-
-          resolve();
+        .then((processResult: ProcessResult) => {
+          if (processResult.result) {
+            resolve();
+          }
         }).catch((error: any) => {
-
+          this.log(error.message);
+          reject();
         });
     });
   }
