@@ -90,7 +90,7 @@ const validations: ConfigValidation[] = [
 async function validateConfig(config: ConfigObject, debug: boolean = false): Promise<ProcessResult> {
 
   var processResult: ProcessResult;
-  processResult = { result: true, message: 'Configuration validation encountered the following error(s):\n' };
+  processResult = { result: true, message: '\nConfiguration validation encountered the following error(s):\n' };
 
   for (var validation of validations) {
 
@@ -145,90 +145,96 @@ export async function processExport(config: ConfigObject, debug: boolean = false
     // }
     const processResult: ProcessResult = { result: true, message: 'Article Export encountered the following error:\n' };
 
-    validateConfig(config, debug).then((res: ProcessResult) => {
-      if (!res.result) {
-        reject(res);
-      } else {
-        console.log('completed validation');
-        const outputFolder = path.join('./', config.outputFolder);
-
-        // Do we have a template argument?
-        if (config.templateFileName) {
-          console.log('Checking template file for replacable tokens\n');
-          const templateFile = path.join('./', config.templateFileName);
-          template = fs.readFileSync(templateFile, 'utf8');
-          // @ts-ignore
-          replacements = template.match(/\{\{([^}]+)\}\}/g);
-          if (!replacements) {
-            processResult.result = false;
-            processResult.message += `\nNo replacable tokens found in template file '${config.templateFileName}'.`;
-            reject(processResult);
-          }
-          console.dir(replacements);
-
-          if (config.gmtOffset) {
-            if (debug) console.log(`GMT Offset: ${config.gmtOffset}`);
-          }
-        }
-
-        // get all categories
-        console.log('\nCategories\n==========');
-        var categories: Category[] = getCategories(config.inputFolder, config.databasePrefix, debug);
-        if (categories.length > 0) {
-          console.log(`Categories: ${categories.length.toLocaleString("en-US")}\n`);
+    validateConfig(config, debug)
+      .then((res: ProcessResult) => {
+        if (!res.result) {
+          reject(res);
         } else {
-          processResult.result = false;
-          processResult.message += '\nNo categories found';
-          reject(processResult);
-        }
+          console.log('completed validation');
+          const outputFolder = path.join('./', config.outputFolder);
 
-        // next get the articles
-        console.log('Articles\n========');
-        var articles: Article[] = getArticles(config.inputFolder, config.databasePrefix, debug);
-        if (articles.length > 0) {
-          console.log(`Articles: ${articles.length.toLocaleString("en-US")}\n`)
-          yesno({
-            question: '\nExport all articles to markdown? Enter yes or no:',
-            defaultValue: false,
-            yesValues: ['Yes'],
-            noValues: ['No']
-          }).then((confirmExport: boolean) => {
-            if (confirmExport) {
-              console.log('Exporting articles...');
-              for (var article of articles) {
-                // Strip invalid characters from the article title
-                article.title = article.title.trim().replace(/[\\/:"*?!<>|]+/g, '');
-                // Adjust the created date (if needed)
-                if (gmtOffset != 0) {
-                  article.created = article.created + " " + calculateOffsetString(gmtOffset);
-                }
-                // Find the category title for this article
-                var category: Category = <Category>categories.find(c => c.id === article.catid);
-                // Set the category title and alias in the article object
-                // category alias is (currently) used in the file name
-                // strip colons from the title
-                article.category_title = category ? category.title.replace(/:/g, '') : 'Unknown';
-                article.category_alias = category ? category.alias : 'unknown';
-                if (config.templateFileName) {
-                  exportTemplateArticle(article, template, replacements, outputFolder, debug);
-                } else {
-                  exportGenericArticle(article, outputFolder, debug);
-                }
-              }
-            } else {
+          // Do we have a template argument?
+          if (config.templateFileName) {
+            console.log('Checking template file for replacable tokens\n');
+            const templateFile = path.join('./', config.templateFileName);
+            template = fs.readFileSync(templateFile, 'utf8');
+            // @ts-ignore
+            replacements = template.match(/\{\{([^}]+)\}\}/g);
+            if (!replacements) {
               processResult.result = false;
-              processResult.message += '\nExport cancelled by user';
+              processResult.message += `\nNo replacable tokens found in template file '${config.templateFileName}'.`;
               reject(processResult);
             }
-          });
-        } else {
-          processResult.result = false;
-          processResult.message += '\nNo articles found';
-          reject(processResult);
+            console.dir(replacements);
+
+            if (config.gmtOffset) {
+              if (debug) console.log(`GMT Offset: ${config.gmtOffset}`);
+            }
+          }
+
+          // get all categories
+          console.log('\nCategories\n==========');
+          var categories: Category[] = getCategories(config.inputFolder, config.databasePrefix, debug);
+          if (categories.length > 0) {
+            console.log(`Categories: ${categories.length.toLocaleString("en-US")}\n`);
+          } else {
+            processResult.result = false;
+            processResult.message += '\nNo categories found';
+            reject(processResult);
+          }
+
+          // next get the articles
+          console.log('Articles\n========');
+          var articles: Article[] = getArticles(config.inputFolder, config.databasePrefix, debug);
+          if (articles.length > 0) {
+            console.log(`Articles: ${articles.length.toLocaleString("en-US")}\n`)
+            yesno({
+              question: '\nExport all articles to markdown? Enter yes or no:',
+              defaultValue: false,
+              yesValues: ['Yes'],
+              noValues: ['No']
+            }).then((confirmExport: boolean) => {
+              if (confirmExport) {
+                console.log('Exporting articles...');
+                for (var article of articles) {
+                  // Strip invalid characters from the article title
+                  article.title = article.title.trim().replace(/[\\/:"*?!<>|]+/g, '');
+                  // Adjust the created date (if needed)
+                  if (gmtOffset != 0) {
+                    article.created = article.created + " " + calculateOffsetString(gmtOffset);
+                  }
+                  // Find the category title for this article
+                  var category: Category = <Category>categories.find(c => c.id === article.catid);
+                  // Set the category title and alias in the article object
+                  // category alias is (currently) used in the file name
+                  // strip colons from the title
+                  article.category_title = category ? category.title.replace(/:/g, '') : 'Unknown';
+                  article.category_alias = category ? category.alias : 'unknown';
+                  if (config.templateFileName) {
+                    exportTemplateArticle(article, template, replacements, outputFolder, debug);
+                  } else {
+                    exportGenericArticle(article, outputFolder, debug);
+                  }
+                }
+              } else {
+                processResult.result = false;
+                processResult.message += '\nExport cancelled by user';
+                reject(processResult);
+              }
+            });
+          } else {
+            processResult.result = false;
+            processResult.message += '\nNo articles found';
+            reject(processResult);
+          }
         }
-      }
-      resolve(processResult);
-    });
+        resolve(processResult);
+      })
+      .catch((err: ProcessResult) => {
+        processResult.result = false;
+        processResult.message += err.message;
+        reject(processResult);
+      });
   });
 }
 
