@@ -95,7 +95,7 @@ async function validateConfig(config: ConfigObject, debug: boolean = false): Pro
   for (var validation of validations) {
 
     if (debug) console.dir(validation);
-    if (debug) console.log(`\nValidating '${validation.propertyName}'`);
+    console.log(`Validating '${validation.propertyName}'`);
 
     // @ts-ignore
     var propertyValue: string = config[validation.propertyName];
