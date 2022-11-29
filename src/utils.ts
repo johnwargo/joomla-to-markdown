@@ -209,13 +209,11 @@ export function processExport(config: ConfigObject, debug: boolean = false): Pro
                   // Adjust the created date (if needed)
                   if (config.gmtOffset != 0) {
                     article.created = article.created + " " + calculateOffsetString(config.gmtOffset!, debug);
-                  } else {
-                    console.log('woah nelly');
                   }
                   // Find the category title for this article
                   var category: Category = <Category>categories.find(c => c.id === article.catid);
-                  // Set the category title and alias in the article object
-                  // category alias is (currently) used in the file name
+                  // Set the category title and alias in the article object. category alias is (currently) 
+                  // used in the file name
                   // strip colons from the title
                   article.category_title = category ? category.title.replace(/:/g, '') : 'Unknown';
                   article.category_alias = category ? category.alias : 'unknown';
@@ -269,15 +267,14 @@ export function exportTemplateArticle(
     // strip the braces and any errant spaces
     var propertyName: string = searchText.replace('{{', '').replace('}}', '').trim();
     // get the value of the property
-    // @ts-ignore
-    var propertyValue: string = article[propertyName];
+    var propertyValue: any = article[propertyName as keyof Article]?.toString();
 
     if (debug) {
       console.log(`Category Title: ${article.category_title}`);
       console.log(`\nSearch Text: ${searchText}, property name: ${propertyName}, replace with '${propertyValue}'`);
     }
 
-    if (propertyValue) {
+    if (propertyValue) {      
       // @ts-ignore
       docBody = docBody.replaceAll(searchText, propertyValue);
     }

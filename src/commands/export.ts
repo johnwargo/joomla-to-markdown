@@ -7,9 +7,7 @@
 
 // export the articles
 import { Command, Flags } from '@oclif/core'
-// var format = require('date-fns/format')
 import fs = require('fs');
-// import path = require('path');
 
 // internal modules
 import { processExport } from '../utils'
