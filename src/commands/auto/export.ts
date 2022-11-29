@@ -26,6 +26,8 @@ export default class AutoExport extends Command {
 
     const configFileMessageRoot = 'The configuration file';
     const debug: boolean = flags.debug || false;
+    
+    if (debug) console.log('Debug mode enabled');
 
     // does the config file exist?    
     const configFilePath = path.join('./', strings.configFileName);

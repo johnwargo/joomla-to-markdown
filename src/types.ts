@@ -18,6 +18,7 @@ export type ConfigObject = {
 
 export type ConfigValidation = {
   propertyName: string;
+  // defaultValue: any;
   isRequired: boolean;
   isFilePath: boolean;
 }

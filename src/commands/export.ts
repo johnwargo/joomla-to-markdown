@@ -58,13 +58,18 @@ export default class Export extends Command {
 
     return new Promise((resolve, reject) => {
 
+      const debug: boolean = flags.debug || false;
+      if (debug) console.log('Debug mode enabled');
+
+      // if we got this far, we should have all of the required parameters
       var configObject: ConfigObject = {
         databasePrefix: args[strings.prefixParam],
         inputFolder: args[strings.sourceFolderParam],
         outputFolder: args[strings.outputFolderParam],
         templateFileName: args[strings.templateParam] || '',
-        gmtOffset: args[strings.gmtOffsetParameter] || 0,
+        gmtOffset: args[strings.gmtOffsetParameter] || 0
       }
+      if (debug) console.dir(configObject);
 
       processExport(configObject, flags.debug)
         .then((processResult: ProcessResult) => {

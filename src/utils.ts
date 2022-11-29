@@ -78,9 +78,16 @@ export function getArticles(inputFolder: string, prefix: string, debug: boolean 
   return articles
 }
 
+// export type ConfigObject = {
+//   databasePrefix: string;
+//   inputFolder: string;
+//   outputFolder: string;
+//   templateFileName?: string;
+//   gmtOffset?: number;
+// }
 
 const validations: ConfigValidation[] = [
-  { propertyName: 'joomlaDatabasePrefix', isRequired: true, isFilePath: false },
+  { propertyName: 'databasePrefix', isRequired: true, isFilePath: false },
   { propertyName: 'inputFolder', isRequired: true, isFilePath: true },
   { propertyName: 'outputFolder', isRequired: true, isFilePath: true },
   { propertyName: 'templateFileName', isRequired: true, isFilePath: true },
@@ -89,17 +96,21 @@ const validations: ConfigValidation[] = [
 
 async function validateConfig(config: ConfigObject, debug: boolean = false): Promise<ProcessResult> {
 
+  var propertyValue: any;
   var processResult: ProcessResult;
+
+  if (debug) console.log(`validateConfig()`);
+
   processResult = { result: true, message: '\nConfiguration validation encountered the following error(s):\n' };
 
   for (var validation of validations) {
-
     if (debug) console.dir(validation);
-    console.log(`Validating '${validation.propertyName}'`);
 
-    // @ts-ignore
-    var propertyValue: string = config[validation.propertyName];
+    console.log(`Validating '${validation.propertyName}'`);
+    propertyValue = config[validation.propertyName as keyof ConfigObject];
+
     if (debug) console.log(`Property value: '${propertyValue}'`);
+
     // Do we have a value?
     if (propertyValue) {
       // is it a required field?
@@ -107,7 +118,6 @@ async function validateConfig(config: ConfigObject, debug: boolean = false): Pro
         processResult.result = false;
         processResult.message += `\nThe '${validation.propertyName}' property is required, but not defined.`;
       }
-
       // is it a file path?
       if (validation.isFilePath && propertyValue.length > 0) {
         const filePath = path.join('./', propertyValue);
@@ -124,7 +134,7 @@ async function validateConfig(config: ConfigObject, debug: boolean = false): Pro
   return processResult;
 }
 
-export async function processExport(config: ConfigObject, debug: boolean = false): Promise<ProcessResult> {
+export function processExport(config: ConfigObject, debug: boolean = false): Promise<ProcessResult> {
 
   var gmtOffset: number = 0;
   var replacements: RegExpMatchArray[] = [];
@@ -133,10 +143,8 @@ export async function processExport(config: ConfigObject, debug: boolean = false
   // Returning a promise because long running commands (and this could 
   // be one) should be wrapped in a promise.
   return new Promise((resolve, reject) => {
-
-    if (debug) console.log('Debug mode enabled');
-
-    // Check the config file for required properties
+  
+    // // Check the config file for required properties
     // const validationResult: ProcessResult = await validateConfig(config, debug);
     // // Did validation fail?
     // if (!validationResult.result) {
@@ -162,7 +170,7 @@ export async function processExport(config: ConfigObject, debug: boolean = false
             replacements = template.match(/\{\{([^}]+)\}\}/g);
             if (!replacements) {
               processResult.result = false;
-              processResult.message += `\nNo replacable tokens found in template file '${config.templateFileName}'.`;
+              processResult.message += `\nNo replacible tokens found in template file '${config.templateFileName}'.`;
               reject(processResult);
             }
             console.dir(replacements);
