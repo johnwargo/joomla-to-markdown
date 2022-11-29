@@ -90,13 +90,12 @@ const validations: ConfigValidation[] = [
   { propertyName: 'databasePrefix', isRequired: true, isFilePath: false },
   { propertyName: 'inputFolder', isRequired: true, isFilePath: true },
   { propertyName: 'outputFolder', isRequired: true, isFilePath: true },
-  { propertyName: 'templateFileName', isRequired: true, isFilePath: true },
+  { propertyName: 'templateFileName', isRequired: false, isFilePath: true },
   { propertyName: 'gmtOffset', isRequired: true, isFilePath: false },
 ];
 
 async function validateConfig(config: ConfigObject, debug: boolean = false): Promise<ProcessResult> {
 
-  var propertyValue: any;
   var processResult: ProcessResult;
 
   if (debug) console.log(`validateConfig()`);
@@ -107,12 +106,12 @@ async function validateConfig(config: ConfigObject, debug: boolean = false): Pro
     if (debug) console.dir(validation);
 
     console.log(`Validating '${validation.propertyName}'`);
-    propertyValue = config[validation.propertyName as keyof ConfigObject];
 
-    if (debug) console.log(`Property value: '${propertyValue}'`);
+    var propertyValue: any = config[validation.propertyName as keyof ConfigObject];
+    if (debug) console.log(`Property value: '${propertyValue}' (type: ${typeof propertyValue})\n`);
 
     // Do we have a value?
-    if (propertyValue) {
+    if (propertyValue != undefined) {
       // is it a required field?
       if (validation.isRequired && propertyValue.toString().length < 1) {
         processResult.result = false;
@@ -143,7 +142,7 @@ export function processExport(config: ConfigObject, debug: boolean = false): Pro
   // Returning a promise because long running commands (and this could 
   // be one) should be wrapped in a promise.
   return new Promise((resolve, reject) => {
-  
+
     // // Check the config file for required properties
     // const validationResult: ProcessResult = await validateConfig(config, debug);
     // // Did validation fail?
@@ -176,7 +175,7 @@ export function processExport(config: ConfigObject, debug: boolean = false): Pro
             console.dir(replacements);
 
             if (config.gmtOffset) {
-              if (debug) console.log(`GMT Offset: ${config.gmtOffset}`);
+              if (debug) console.log(`\nGMT Offset: ${config.gmtOffset}`);
             }
           }
 
@@ -208,8 +207,10 @@ export function processExport(config: ConfigObject, debug: boolean = false): Pro
                   // Strip invalid characters from the article title
                   article.title = article.title.trim().replace(/[\\/:"*?!<>|]+/g, '');
                   // Adjust the created date (if needed)
-                  if (gmtOffset != 0) {
-                    article.created = article.created + " " + calculateOffsetString(gmtOffset);
+                  if (config.gmtOffset != 0) {
+                    article.created = article.created + " " + calculateOffsetString(config.gmtOffset!, debug);
+                  } else {
+                    console.log('woah nelly');
                   }
                   // Find the category title for this article
                   var category: Category = <Category>categories.find(c => c.id === article.catid);
@@ -255,7 +256,7 @@ export function exportTemplateArticle(
 
   var docBody: string;
 
-  console.log(`\nExportArticle('${article.title}', template, '${outputFolder}', replacements)`);
+  console.log(`\nexportTemplateArticle('${article.title}', template, '${outputFolder}', replacements)`);
   if (debug) console.dir(article);
   // convert the article body to markdown
   article.introtext = turndownService.turndown(article.introtext);
@@ -286,7 +287,7 @@ export function exportTemplateArticle(
 
   // Calculate the output file name  
   var outputFileName = path.join(outputFolder, buildOutputFileName(article.title, article.created));
-  console.log(`Writing file '${outputFileName}'\n`);
+  console.log(`Writing file '${outputFileName}'`);
   // write the body to the file
   fs.writeFileSync(outputFileName, docBody, {});
 }
@@ -305,7 +306,7 @@ export function exportGenericArticle(
     return tmpStr;
   }
 
-  console.log(`writeArticle('${article.title}', '${outputFolder}')`);
+  console.log(`exportGenericArticle('${article.title}', '${outputFolder}')`);
   // figure out the output file name
   var outputFileName = path.join(outputFolder, buildOutputFileName(article.title, article.created));
   console.log(`Output File: '${outputFileName}'\n`);
@@ -326,7 +327,8 @@ export function exportGenericArticle(
 }
 
 
-function calculateOffsetString(offset: number): string {
+function calculateOffsetString(offset: number, debug: boolean = false): string {
+  if (debug) console.log(`calculateOffsetString(${offset})`);
   const isNegative = offset < 0;
   const offsetValStr = (Math.abs(offset) * 100).toString().padStart(4, '0');
   return isNegative ? '-' + offsetValStr : offsetValStr;
