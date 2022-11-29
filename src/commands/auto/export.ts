@@ -4,6 +4,8 @@ import { readFile } from "fs/promises";
 import path = require('path');
 const yesno = require('yesno');
 
+// internal modules
+import { processExport } from '../../utils'
 import Strings from '../../strings';
 import { ConfigObject, ProcessResult } from '../../types';
 
@@ -19,14 +21,14 @@ export default class AutoExport extends Command {
   static flags = { debug: Flags.boolean({ char: 'd' }) };
   static args = [];
 
-  
+
 
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(AutoExport);
 
     const configFileMessageRoot = 'The configuration file';
     const debug: boolean = flags.debug || false;
-    
+
     if (debug) console.log('Debug mode enabled');
 
     // does the config file exist?    
@@ -39,15 +41,23 @@ export default class AutoExport extends Command {
     }
 
     // read the config file
-    this.log('Reading config file...');
+    this.log('\nReading config file...');
     var config = await readJsonFile(configFilePath) as ConfigObject;
     if (config) {
       if (debug) console.dir(config);
+      processExport(config, flags.debug)
+        .then((processResult: ProcessResult) => {
+          if (processResult.result) {
+            this.log('Completed export');
+          } else {
+            this.error(`\n${processResult.message}\n`);
+          }
+        }).catch((error: any) => {
+          this.error(error.message);
+        });
     } else {
       this.error(`Unable to read the configuration file, please check the file and try again.`);
     }
-
-    
   }
 }
 
