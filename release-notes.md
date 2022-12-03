@@ -1,5 +1,9 @@
 # Release Notes
 
+## 0.0.7 - 2022-12-03
+
+Added an automated export process driven by a configuration file instead of command-line parameters.
+
 ## 0.0.6 - 2022-11-22
 
 Added an optional parameter to the `export` command. The parameter, `gmtOffset` which adds some additional text to the created date in the output file. This is the -0500 shown in the following example:
