@@ -117,6 +117,8 @@ Reduces the amount of command-line parameters a user must provide to use the exp
 
 #### Init
 
+Use `auto init` or `ai` for this command.
+
 Create an empty configuration file in the current folder.
 
 ``` shell
@@ -151,6 +153,8 @@ Use a text editor to populate the file with the appropriate parameters for your 
 
 #### Edit
 
+Use `auto edit` or `aed` for this command.
+
 Launches the configuration file in the system's default editor.
 
 ``` shell
@@ -158,6 +162,8 @@ j2md auto edit
 ```
 
 #### Export
+
+Use `auto export` or `ae` for this command.
 
 Exports article content using the settings defined in the current folder's `j2md.json` configuration file. Use the `auto init` command to generate the file.
 

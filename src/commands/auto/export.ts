@@ -17,7 +17,6 @@ export default class AutoExport extends Command {
   static description = 'Export Joomla article content to markdown files using the configuration options defined in the local configuration file.';
   static aliases = ['ae'];
   static examples = ['<%= config.bin %> <%= command.id %>'];
-
   static flags = { debug: Flags.boolean({ char: 'd' }) };
   static args = [];
 
