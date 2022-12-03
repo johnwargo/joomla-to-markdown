@@ -113,6 +113,7 @@ Table: e3yh9_content
 
 ### Auto
 
+Reduces the amount of command-line parameters a user must provide to use the export process, replaces the required command-line parameters with a configuration file.
 
 #### Init
 
