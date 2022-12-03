@@ -53,7 +53,7 @@ To use the module, you must complete the following steps to export your Joomla d
 3. Craft a template file (instructions below) that describes the format of the exported markdown file for each Joomla article.
 4. Execute the module's `export` command to convert the contents of the JSON files to individual markdown files for each article.
 
-![MySQL Admin Export Panel](/images/figure-01.png)
+![MySQL Admin Export Panel](https://github.com/johnwargo/joomla-to-markdown/blob/main/images/figure-01.png)
 
 The module uses both the Joomla site's `categories` and `content` table content because the article table only contains references to Category names via is category ID. The module must have access to the `categories` table in order to copy over the category name and category alias values when exporting articles.
 
@@ -74,13 +74,13 @@ Use `arts` or `a` for this command.
 Display a list of article information to the console; the module reads the `content` export file, parses the content then displays each Article Id, Article Title, and Alias in a table. Use this command to validate the contents of the `content` export.
 
 ``` shell
-j32md arts sourceFolder joomlaDatabasePrefix
+j2md arts sourceFolder joomlaDatabasePrefix
 ```
 
 For example, with all of the Joomla exported content in a folder called `input` and a database prefix of `e3yh9`, you would use the following command:
 
 ``` shell
-j32md arts input e3yh9
+j2md arts input e3yh9
 ```
 
 **Note:** if you don't have the exported Joomla content in a sub-folder, simply use `.` for the sourceFolder parameter.
@@ -117,12 +117,49 @@ Reduces the amount of command-line parameters a user must provide to use the exp
 
 #### Init
 
+Create an empty configuration file in the current folder.
+
+``` shell
+j2md auto init
+```
+
+When the command executes, it creates a file called `j2md.json` in the current folder with the following contents:
+
+```shell
+{
+    "databasePrefix": "",
+    "inputFolder": "",
+    "outputFolder": "",
+    "templateFileName": "",
+    "gmtOffset": 0
+}
+```
+
+Use a text editor to populate the file with the appropriate parameters for your project as shown below:
+
+```shell
+{
+    "databasePrefix": "e3yh9",
+    "inputFolder": "input",
+    "outputFolder": "output",
+    "templateFileName": "jekyll.md",
+    "gmtOffset": -5
+}
+```
+
+**Note:** You can open the file in the system's default editor from the command-line using the `auto edit` command in the same folder.
 
 #### Edit
 
+Launches the configuration file in the system's default editor.
+
+``` shell
+j2md auto edit
+```
 
 #### Export
 
+Exports article content using the settings defined in the current folder's `j2md.json` configuration file. Use the `auto init` command to generate the file.
 
 ### Categories
 
@@ -131,13 +168,13 @@ Use `cats` or `c` for this command.
 Display a list of category information to the console; the module reads the `categories` export file, parses the content then displays each article Id, Name, and Path in a table. Use this command to validate the contents of the `categories` export.
 
 ``` shell
-j32md cats sourceFolder joomlaDatabasePrefix
+j2md cats sourceFolder joomlaDatabasePrefix
 ```
 
 For example, with all of the Joomla exported content in a folder called `input` and a database prefix of `e3yh9`, you would use the following command:
 
 ``` shell
-j32md cats input e3yh9
+j2md cats input e3yh9
 ```
 
 **Note:** if you don't have the exported Joomla content in a sub-folder, simply use `.` for the sourceFolder parameter.
@@ -179,13 +216,13 @@ Empties (clears) the contents of the output folder where the module writes artic
 **Note:** The module automatically overwrites existing files in the output folder, so there's really no need to ever use this command :-)
 
 ``` shell
-j32md clear outputFolder
+j2md clear outputFolder
 ```
 
 For example, with all of the exported article markdown files in a folder called `output`, you would use the following command:
 
 ``` shell
-j32md clear output
+j2md clear output
 ```
 
 ### Export
@@ -230,7 +267,7 @@ In the example above, `category_title` is used to set the Jekyll post category.
 Now, with the template file in place, you're ready to export your Joomla articles to markdown files. In a terminal window, execute the following command
 
 ``` shell
-j32md export sourceFolder joomlaDatabasePrefix destinationFolder templateFile
+j2md export sourceFolder joomlaDatabasePrefix destinationFolder templateFile
 ```
 
 For example, with the following configuration:
@@ -243,7 +280,7 @@ For example, with the following configuration:
 Use the following command:
 
 ``` shell
-j32md export input e3yh9 output jekyll.md
+j2md export input e3yh9 output jekyll.md
 ```
 
 The module will create a separate markdown file for each article defined in the exported `content` table; an example of a generated file looks like this:
@@ -263,7 +300,7 @@ I haven't used attachments in this site in a long time, so I will soon delete th
 The sample post Jekyll creates for a new site has a GMT offset added to the create date field. To add this to exported markdown files, add a GMT offset to the `export` command as shown in the follwing example:
 
 ``` shell
-j32md export input e3yh9 output jekyll.md -5
+j2md export input e3yh9 output jekyll.md -5
 ```
 
 This will add `-0500` to the date field as shown in the following example markdown file:
@@ -287,13 +324,13 @@ Use `stats` or `s` for this command.
 Displays category count and article count for the specified Joomla exported content.  Use this command to determine how many categories and articles are listed in the exported Joomla tables.
 
 ``` shell
-j32md cats sourceFolder joomlaDatabasePrefix
+j2md cats sourceFolder joomlaDatabasePrefix
 ```
 
 For example, with all of the Joomla exported content in a folder called `input` and a database prefix of `e3yh9`, you would use the following command:
 
 ``` shell
-j32md stats input e3yh9
+j2md stats input e3yh9
 ```
 
 The module will read the `e3yh9_categories.json` and `e3yh9_content.json` files and displays the record counts in the console as shown below:
