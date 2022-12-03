@@ -3,7 +3,7 @@
 import { CliUx, Command, Flags } from '@oclif/core'
 // internal modules
 import Strings from '../strings';
-import {Category } from '../types';
+import { Category } from '../types';
 import { getCategories } from '../utils'
 var strings = new Strings()
 
@@ -12,9 +12,7 @@ export default class Cats extends Command {
   static description = 'List all the categories in the export file.'
   static aliases = ['c']
   static examples = [strings.twoParamExample]
-
   static flags = { debug: Flags.boolean({ char: 'd' }) }
-
   static args = [
     {
       name: strings.sourceFolderParam,

@@ -13,9 +13,7 @@ export default class Arts extends Command {
   static description = 'List all the articles in the export file.'
   static aliases = ['a']
   static examples = [strings.twoParamExample]
-
   static flags = { debug: Flags.boolean({ char: 'd' }) }
-
   static args = [
     {
       name: strings.sourceFolderParam,

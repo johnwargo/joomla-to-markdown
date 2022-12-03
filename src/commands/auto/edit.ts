@@ -22,7 +22,6 @@ export default class AutoEdit extends Command {
   static description = 'Launch the default editor for the local configuration file.';
   static aliases = ['aed'];
   static examples = ['<%= config.bin %> <%= command.id %>'];
-
   static flags = { debug: Flags.boolean({ char: 'd' }) };
   static args = [];
 

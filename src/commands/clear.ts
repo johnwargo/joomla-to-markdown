@@ -12,9 +12,7 @@ export default class Clear extends Command {
   static description = 'Delete all markdown files from the output folder.'
   static aliases = ['x'];
   static examples = [strings.oneParamExample];
-
   static flags = { debug: Flags.boolean({ char: 'd' }) }
-
   static args = [{
     name: strings.outputFolderParam,
     description: strings.outputFolderDescription,
@@ -39,8 +37,10 @@ export default class Clear extends Command {
         if (confirmDelete) {
           this.log('Deleting files...');
           fs.emptyDirSync(outputFolder);
+          resolve();
         } else {
           this.log('Deletion cancelled');
+          reject('Cancelled by user');
         }
       } else {
         this.error(`Output folder '${outputFolder}' does not exist, please create it and try again.`);

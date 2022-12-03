@@ -32,7 +32,6 @@ export default class AutoInit extends Command {
   static description = 'Create the local configuration file for the auto command.';
   static aliases = ['ai'];
   static examples = ['<%= config.bin %> <%= command.id %>'];
-
   static flags = { debug: Flags.boolean({ char: 'd' }) };
   static args = [];
 
