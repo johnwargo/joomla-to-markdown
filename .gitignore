@@ -10,6 +10,7 @@
 /output
 
 /.github
+/.vscode
 
 # Files
 *-debug.log

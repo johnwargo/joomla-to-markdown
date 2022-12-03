@@ -9,8 +9,13 @@
 
 - [Export Joomla to Markdown](#export-joomla-to-markdown)
   - [Preparing for Use](#preparing-for-use)
+  - [Modes of Operation](#modes-of-operation)
   - [Commands](#commands)
     - [Articles](#articles)
+    - [Auto](#auto)
+      - [Init](#init)
+      - [Edit](#edit)
+      - [Export](#export)
     - [Categories](#categories)
     - [Clear](#clear)
     - [Export](#export)
@@ -19,11 +24,11 @@
 
 <!-- /TOC -->
 
-The [Joomla!](https://www.joomla.org/) to Markdown (`j2md`) module is a node.js command line utility for converting Joomla 3 article content into markdown files. I needed to migrate an old Jomla 3 site to another platform and wrote this module to handle the heavy lifting for me. I wanted to use something like [Jekyll](https://jekyllrb.com/) or [Eleventy](https://www.11ty.dev/) for my site and knew that both supported markdown files.
+The [Joomla!](https://www.joomla.org/) to Markdown (`j2md`) module is a node.js command line utility for converting Joomla 3 article content into markdown files. I needed to migrate an old Joomla 3 site to another platform and wrote this module to handle the heavy lifting for me. I wanted to use something like [Jekyll](https://jekyllrb.com/) or [Eleventy](https://www.11ty.dev/) for my site and knew that both supported markdown files.
 
 **npm Package:**: https://www.npmjs.com/package/joomla-to-markdown
 
-**Note:** This module was only tested against data from a Joomla 3 site running on MySQL; it could very well work with a Joomla 4 site, I just haven't tested it (yet).
+**Note:** This module was only tested against data from a Joomla 3 site running on MySQL; it could very well work with a Joomla 4 site, I just haven't tested it.
 
 To use this module, first install it using the following command:
 
@@ -43,14 +48,20 @@ Using the supported commands listed in the following section.
 
 To use the module, you must complete the following steps to export your Joomla data and convert your article content to [Markdown](https://daringfireball.net/projects/markdown/) format:
 
-1. Using MySQL Admin (shoown below) or your export tool of choice export your site's `categories` table in JSON format to a local file.
-2. Export your site's `content` table in JDON format to a local file.
+1. Using MySQL Admin (shown below) or your export tool of choice export your site's `categories` table in JSON format to a local file.
+2. Export your site's `content` table in JSON format to a local file.
 3. Craft a template file (instructions below) that describes the format of the exported markdown file for each Joomla article.
 4. Execute the module's `export` command to convert the contents of the JSON files to individual markdown files for each article.
 
 ![MySQL Admin Export Panel](/images/figure-01.png)
 
 The module uses both the Joomla site's `categories` and `content` table content because the article table only contains references to Category names via is category ID. The module must have access to the `categories` table in order to copy over the category name and category alias values when exporting articles.
+
+## Modes of Operation
+
+This module originally shipped with an export process that required users to provide multiple command-line parameters every time they wanted to generate articles. Recognizing that as a user tweaks the export template, they may execute the process many times with the same parameters. To simplify the process for this use case, I added an `auto` command that enables users to drive article export through a configuration file. 
+
+Currently, the module only supports a default configuration file name (`j2md.json`) but I can easily update the module to accept the config file name as an input parameter. 
 
 ## Commands
 
@@ -60,26 +71,26 @@ The following sections illustrate how to use to use each of the commands provide
 
 Use `arts` or `a` for this command.
 
-Display a list of article information to the console; the module reads the `content` export file, parses the content then displays each article Id, Title, and Alias in a table. Use this command to validate the contents of the `content` export.
+Display a list of article information to the console; the module reads the `content` export file, parses the content then displays each Article Id, Article Title, and Alias in a table. Use this command to validate the contents of the `content` export.
 
 ``` shell
 j32md arts sourceFolder joomlaDatabasePrefix
 ```
 
-For example, with all of the Joomla exported content in a folder called `input` and a database prefix of `e4hy6`, you would use the following command:
+For example, with all of the Joomla exported content in a folder called `input` and a database prefix of `e3yh9`, you would use the following command:
 
 ``` shell
-j32md arts input e4hy6
+j32md arts input e3yh9
 ```
 
 **Note:** if you don't have the exported Joomla content in a sub-folder, simply use `.` for the sourceFolder parameter.
 
-The module will read the `e4hy6_content.json` file and display details for each article in a table as shown below:
+The module will read the `e3yh9_content.json` file and display details for each article in a table as shown below:
 
 ``` text
  
 Database: jmw_cms
-Table: e4hy6_content
+Table: e3yh9_content
 
 515 articles
 
@@ -100,6 +111,18 @@ Table: e4hy6_content
 ------------------------------------------------------------- -----------------------
 ```
 
+### Auto
+
+
+#### Init
+
+
+#### Edit
+
+
+#### Export
+
+
 ### Categories
 
 Use `cats` or `c` for this command.
@@ -110,19 +133,19 @@ Display a list of category information to the console; the module reads the `cat
 j32md cats sourceFolder joomlaDatabasePrefix
 ```
 
-For example, with all of the Joomla exported content in a folder called `input` and a database prefix of `e4hy6`, you would use the following command:
+For example, with all of the Joomla exported content in a folder called `input` and a database prefix of `e3yh9`, you would use the following command:
 
 ``` shell
-j32md cats input e4hy6
+j32md cats input e3yh9
 ```
 
 **Note:** if you don't have the exported Joomla content in a sub-folder, simply use `.` for the sourceFolder parameter.
 
-The module will read the `e4hy6_categories.json` file and display details for each category in a table as shown below:
+The module will read the `e3yh9_categories.json` file and display details for each category in a table as shown below:
 
 ``` text
 Database: jmw_cms
-Table: e4hy6_categories
+Table: e3yh9_categories
 
 35 Categories
 
@@ -196,7 +219,7 @@ categories: {{category_title}}
 {{introtext}}
 ```
 
-The export process adds two addtional fields to the article record that you can use in your template:
+The export process adds two additional fields to the article record that you can use in your template:
 
 * `category_title`: The `categories` table category name for the selected article.
 * `category_alias`: The `categories` table alias for the selected article.
@@ -212,14 +235,14 @@ j32md export sourceFolder joomlaDatabasePrefix destinationFolder templateFile
 For example, with the following configuration:
 
 * The Joomla exported content JSON files in a folder called `input` 
-* The Joomla site's database prefix `e4hy6`
+* The Joomla site's database prefix `e3yh9`
 * Output folder `output`
 * Template file name `jekyll.md`
 
 Use the following command:
 
 ``` shell
-j32md export input e4hy6 output jekyll.md
+j32md export input e3yh9 output jekyll.md
 ```
 
 The module will create a separate markdown file for each article defined in the exported `content` table; an example of a generated file looks like this:
@@ -239,7 +262,7 @@ I haven't used attachments in this site in a long time, so I will soon delete th
 The sample post Jekyll creates for a new site has a GMT offset added to the create date field. To add this to exported markdown files, add a GMT offset to the `export` command as shown in the follwing example:
 
 ``` shell
-j32md export input e4hy6 output jekyll.md -5
+j32md export input e3yh9 output jekyll.md -5
 ```
 
 This will add `-0500` to the date field as shown in the following example markdown file:
@@ -266,13 +289,13 @@ Displays category count and article count for the specified Joomla exported cont
 j32md cats sourceFolder joomlaDatabasePrefix
 ```
 
-For example, with all of the Joomla exported content in a folder called `input` and a database prefix of `e4hy6`, you would use the following command:
+For example, with all of the Joomla exported content in a folder called `input` and a database prefix of `e3yh9`, you would use the following command:
 
 ``` shell
-j32md stats input e4hy6
+j32md stats input e3yh9
 ```
 
-The module will read the `e4hy6_categories.json` and `e4hy6_content.json` files and displays the record counts in the console as shown below:
+The module will read the `e3yh9_categories.json` and `e3yh9_content.json` files and displays the record counts in the console as shown below:
 
 ``` text
 Database: my_cms
