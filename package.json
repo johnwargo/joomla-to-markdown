@@ -1,6 +1,6 @@
 {
   "name": "joomla-to-markdown",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Convert JSON Exported Joomla article content to markdown files",
   "author": "John M. Wargo @johnwargo",
   "bin": {
