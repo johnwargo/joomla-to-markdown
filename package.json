@@ -6,7 +6,7 @@
   "bin": {
     "j2md": "./bin/run"
   },
-  "homepage": "https://github.com/johnwargo/joomla-to-md",
+  "homepage": "https://github.com/johnwargo/joomla-to-markdown",
   "license": "MIT",
   "main": "dist/index.js",
   "repository": "johnwargo/joomla-to-md",
