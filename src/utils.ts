@@ -303,7 +303,7 @@ export function exportGenericArticle(
     return tmpStr;
   }
 
-  console.log(`exportGenericArticle('${article.title}', '${outputFolder}')`);
+  // console.log(`exportGenericArticle('${article.title}', '${outputFolder}')`);
   // figure out the output file name
   var outputFileName = path.join(outputFolder, buildOutputFileName(article.title, article.created));
   console.log(`Output File: '${outputFileName}'\n`);
