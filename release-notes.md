@@ -1,6 +1,6 @@
 # Release Notes
 
-## 0.0.8 - 2023-03-19
+## 0.0.12 - 2023-03-19
 
 Added the `--shortDate` (-z) parameter to deal with how [Eleventy](https://www.11ty.dev/) deals with dates in file names and ignores timestamps in front matter. Added 11ty template. 
 
