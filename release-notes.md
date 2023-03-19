@@ -1,5 +1,13 @@
 # Release Notes
 
+## 0.0.14 - 2023-03-19
+
+Added `directoryExists` function to `utils.js` and changed Clear to use it.
+
+## 0.0.13 - 2023-03-19
+
+Cleaned up some issues with the code, especially the format of the short date in the output files frontmatter.
+
 ## 0.0.12 - 2023-03-19
 
 Added the `--shortDate` (-z) parameter to deal with how [Eleventy](https://www.11ty.dev/) deals with dates in file names and ignores timestamps in front matter. Added 11ty template. 
