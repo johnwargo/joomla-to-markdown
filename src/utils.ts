@@ -379,5 +379,6 @@ export function directoryExists(filePath: string): boolean {
       console.error(`checkDirectory error: ${err}`);
     }
   }
+  console.log(`Directory '${filePath}' does not exist.`);
   return false;
 }
