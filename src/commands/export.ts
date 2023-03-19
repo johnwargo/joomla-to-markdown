@@ -21,7 +21,10 @@ export default class Export extends Command {
   static description = 'Export all articles as markdown files.'
   static aliases = ['e']
   static examples = [strings.fourParamExample]
-  static flags = { debug: Flags.boolean({ char: 'd' }) }
+  static flags = {
+    debug: Flags.boolean({ char: 'd' }),
+    shortDate: Flags.boolean({ char: 'z' })
+  }
   static args = [
     {
       name: strings.sourceFolderParam,
@@ -67,7 +70,7 @@ export default class Export extends Command {
       }
       if (debug) console.dir(configObject);
 
-      processExport(configObject, flags.debug)
+      processExport(configObject, flags.debug, flags.shortDate)
         .then((processResult: ProcessResult) => {
           if (processResult.result) {
             resolve();

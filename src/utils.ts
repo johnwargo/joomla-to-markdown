@@ -94,7 +94,7 @@ const validations: ConfigValidation[] = [
   { propertyName: 'gmtOffset', isRequired: true, isFilePath: false },
 ];
 
-async function validateConfig(config: ConfigObject, debug: boolean = false): Promise<ProcessResult> {
+async function validateConfig(config: ConfigObject, debug: boolean): Promise<ProcessResult> {
 
   var processResult: ProcessResult;
 
@@ -133,9 +133,9 @@ async function validateConfig(config: ConfigObject, debug: boolean = false): Pro
   return processResult;
 }
 
-export function processExport(config: ConfigObject, debug: boolean = false): Promise<ProcessResult> {
+export function processExport(config: ConfigObject, debug: boolean = false, shortDate: boolean = false): Promise<ProcessResult> {
 
-  var gmtOffset: number = 0;
+  // var gmtOffset: number = 0;
   var replacements: RegExpMatchArray[] = [];
   var template: string;
 
@@ -218,7 +218,7 @@ export function processExport(config: ConfigObject, debug: boolean = false): Pro
                   article.category_title = category ? category.title.replace(/:/g, '') : 'Unknown';
                   article.category_alias = category ? category.alias : 'unknown';
                   if (config.templateFileName) {
-                    exportTemplateArticle(article, template, replacements, outputFolder, debug);
+                    exportTemplateArticle(article, template, replacements, outputFolder, debug, shortDate);
                   } else {
                     exportGenericArticle(article, outputFolder, debug);
                   }
@@ -250,7 +250,8 @@ export function exportTemplateArticle(
   template: string,
   replacements: RegExpMatchArray[],
   outputFolder: string,
-  debug: boolean = false) {
+  debug: boolean,
+  shortDate: boolean) {
 
   var docBody: string;
 
@@ -269,12 +270,18 @@ export function exportTemplateArticle(
     // get the value of the property
     var propertyValue: any = article[propertyName as keyof Article]?.toString();
 
+    if (shortDate && propertyName === 'created') {
+      // Stripping time portion from Created?
+      let tmpDate = new Date(propertyValue);
+      propertyValue = tmpDate.toLocaleDateString('en-US');
+    }
+
     if (debug) {
       console.log(`Category Title: ${article.category_title}`);
       console.log(`\nSearch Text: ${searchText}, property name: ${propertyName}, replace with '${propertyValue}'`);
     }
 
-    if (propertyValue) {      
+    if (propertyValue) {
       // @ts-ignore
       docBody = docBody.replaceAll(searchText, propertyValue);
     }
@@ -283,7 +290,7 @@ export function exportTemplateArticle(
   if (debug) console.dir(docBody);
 
   // Calculate the output file name  
-  var outputFileName = path.join(outputFolder, buildOutputFileName(article.title, article.created));
+  var outputFileName = path.join(outputFolder, buildOutputFileName(article.title, article.created, debug, shortDate));
   console.log(`Writing file '${outputFileName}'`);
   // write the body to the file
   fs.writeFileSync(outputFileName, docBody, {});
@@ -292,7 +299,7 @@ export function exportTemplateArticle(
 export function exportGenericArticle(
   article: Article,
   outputFolder: string,
-  debug: boolean = false) {
+  debug: boolean) {
 
   const crlf = '\r\n';
   const threeDashes = '---' + crlf;
@@ -305,7 +312,7 @@ export function exportGenericArticle(
 
   // console.log(`exportGenericArticle('${article.title}', '${outputFolder}')`);
   // figure out the output file name
-  var outputFileName = path.join(outputFolder, buildOutputFileName(article.title, article.created));
+  var outputFileName = path.join(outputFolder, buildOutputFileName(article.title, article.created, debug, false));
   console.log(`Output File: '${outputFileName}'\n`);
   // build the file content
   var docBody = threeDashes;
@@ -331,7 +338,7 @@ function calculateOffsetString(offset: number, debug: boolean = false): string {
   return isNegative ? '-' + offsetValStr : offsetValStr;
 }
 
-function buildOutputFileName(title: string, articleDate: string, debug: boolean = false): string {
+function buildOutputFileName(title: string, articleDate: string, debug: boolean, shortDate: boolean): string {
   // replace spaces with dashes (kill extra spaces first)
   // @ts-ignore
   var tempTitle = title.toLowerCase().replaceAll('  ', ' ').replaceAll(' ', '-');
@@ -339,7 +346,11 @@ function buildOutputFileName(title: string, articleDate: string, debug: boolean 
   // convert the date string into a Date/Time object
   var tempDate = parseJSON(articleDate);
   // build the file name
-  return `${tempDate.getFullYear()}-${zeroPad(tempDate.getMonth() + 1)}-${zeroPad(tempDate.getDate())}-${tempTitle}.md`;
+  if (shortDate) {
+    return `${tempDate.getFullYear()}-${tempTitle}.md`;
+  } else {
+    return `${tempDate.getFullYear()}-${zeroPad(tempDate.getMonth() + 1)}-${zeroPad(tempDate.getDate())}-${tempTitle}.md`;
+  }
 }
 
 function zeroPad(tmpVal: number, numChars: number = 2): string {

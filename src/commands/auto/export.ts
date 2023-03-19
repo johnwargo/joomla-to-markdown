@@ -17,7 +17,10 @@ export default class AutoExport extends Command {
   static description = 'Export Joomla article content to markdown files using the configuration options defined in the local configuration file.';
   static aliases = ['ae'];
   static examples = ['<%= config.bin %> <%= command.id %>'];
-  static flags = { debug: Flags.boolean({ char: 'd' }) };
+  static flags = {
+    debug: Flags.boolean({ char: 'd' }),
+    shortDate: Flags.boolean({ char: 'z' })
+  }
   static args = [];
 
   public async run(): Promise<void> {
@@ -48,7 +51,7 @@ export default class AutoExport extends Command {
         
         if (debug) console.dir(configObject);
 
-        processExport(configObject, flags.debug)
+        processExport(configObject, flags.debug, flags.shortDate)
           .then((processResult: ProcessResult) => {
             if (processResult.result) {
               resolve();

@@ -1,5 +1,9 @@
 # Release Notes
 
+## 0.0.8 - 2023-03-19
+
+Added the `--shortDate` (-z) parameter to deal with how [Eleventy](https://www.11ty.dev/) deals with dates in file names and ignores timestamps in front matter. Added 11ty template. 
+
 ## 0.0.7 - 2022-12-03
 
 Added an automated export process driven by a configuration file instead of command-line parameters.
