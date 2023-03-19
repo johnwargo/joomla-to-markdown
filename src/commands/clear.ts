@@ -5,6 +5,7 @@ const yesno = require('yesno');
 
 // internal modules
 import Strings from '../strings'
+import { directoryExists } from '../utils'
 var strings = new Strings()
 
 export default class Clear extends Command {
@@ -25,8 +26,7 @@ export default class Clear extends Command {
     return new Promise(async (resolve, reject) => {
       // does the export folder exist? (it should, I don't want to have to worry about creating it)      
       const outputFolder = path.join(process.cwd(), args[strings.outputFolderParam]);
-      console.log(outputFolder);
-      if (fs.existsSync(outputFolder)) {
+      if (directoryExists(outputFolder)) {
         this.log(`Folder '${outputFolder}' exists`);
         // Make sure the user wants to delete the files
         const confirmDelete = await yesno({

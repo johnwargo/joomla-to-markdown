@@ -366,3 +366,18 @@ function compareFunction(a: any, b: any) {
   }
   return 0;
 }
+
+export function directoryExists(filePath: string): boolean {
+  console.log(`Locating ${filePath}`);
+  // does the folder exist?
+  if (fs.existsSync(filePath)) {
+    try {
+      // https://stackoverflow.com/questions/15630770/node-js-check-if-path-is-file-or-directory
+      // Check to see if it's a folder
+      return fs.lstatSync(filePath).isDirectory();
+    } catch (err) {
+      console.error(`checkDirectory error: ${err}`);
+    }
+  }
+  return false;
+}
