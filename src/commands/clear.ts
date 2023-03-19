@@ -24,7 +24,8 @@ export default class Clear extends Command {
 
     return new Promise(async (resolve, reject) => {
       // does the export folder exist? (it should, I don't want to have to worry about creating it)      
-      const outputFolder = path.join('./', args[strings.outputFolderParam]);
+      const outputFolder = path.join(process.cwd(), args[strings.outputFolderParam]);
+      console.log(outputFolder);
       if (fs.existsSync(outputFolder)) {
         this.log(`Folder '${outputFolder}' exists`);
         // Make sure the user wants to delete the files

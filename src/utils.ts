@@ -273,7 +273,7 @@ export function exportTemplateArticle(
     if (shortDate && propertyName === 'created') {
       // Stripping time portion from Created?
       let tmpDate = new Date(propertyValue);
-      propertyValue = tmpDate.toLocaleDateString('en-US');
+      propertyValue = `${tmpDate.getFullYear()}-${zeroPad(tmpDate.getMonth() + 1)}-${zeroPad(tmpDate.getDate())}`;
     }
 
     if (debug) {
