@@ -8,6 +8,7 @@ import { Article, Category, ConfigObject, ConfigValidation, ProcessResult } from
 
 const catFileRoot: string = "_categories.json"
 const artFileRoot: string = "_content.json"
+const blankStr = '';
 
 var turndownService = new Turndown();
 
@@ -340,10 +341,20 @@ function calculateOffsetString(offset: number, debug: boolean = false): string {
 
 function buildOutputFileName(title: string, articleDate: string, debug: boolean, shortDate: boolean): string {
   // replace spaces with dashes (kill extra spaces first)
-  // Remove any # or @ characters
+  // Remove any #, @, or comma characters
   // Remove all repeating periods
   // @ts-ignore
-  var tempTitle = title.toLowerCase().replaceAll('  ', ' ').replaceAll(' ', '-').replaceAll('#', '').replaceAll('@', '').replaceAll('..', '.');
+  var tempTitle = title.toLowerCase().replaceAll('  ', ' ');
+  tempTitle = tempTitle.replaceAll(' – ', ' '); 
+  tempTitle = tempTitle.replaceAll(' - ', ' ');
+  tempTitle = tempTitle.replaceAll(' ', '-');
+  tempTitle = tempTitle.replaceAll('--', '-');
+  tempTitle = tempTitle.replaceAll('..', blankStr);
+  tempTitle = tempTitle.replaceAll(',', blankStr);
+  tempTitle = tempTitle.replaceAll('#', blankStr);
+  tempTitle = tempTitle.replaceAll('@', blankStr);
+  // does it end in a period? Then remove it
+  if (tempTitle.endsWith('.')) tempTitle = tempTitle.substring(0, tempTitle.length - 1);
   if (debug) console.log(`Temp Title: ${tempTitle}`);
   // convert the date string into a Date/Time object
   var tempDate = parseJSON(articleDate);
