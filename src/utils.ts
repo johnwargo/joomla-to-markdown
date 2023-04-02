@@ -340,8 +340,10 @@ function calculateOffsetString(offset: number, debug: boolean = false): string {
 
 function buildOutputFileName(title: string, articleDate: string, debug: boolean, shortDate: boolean): string {
   // replace spaces with dashes (kill extra spaces first)
+  // Remove any # or @ characters
+  // Remove all repeating periods
   // @ts-ignore
-  var tempTitle = title.toLowerCase().replaceAll('  ', ' ').replaceAll(' ', '-');
+  var tempTitle = title.toLowerCase().replaceAll('  ', ' ').replaceAll(' ', '-').replaceAll('#', '').replaceAll('@', '').replaceAll('..', '.');
   if (debug) console.log(`Temp Title: ${tempTitle}`);
   // convert the date string into a Date/Time object
   var tempDate = parseJSON(articleDate);
