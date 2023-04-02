@@ -1,5 +1,16 @@
 # Release Notes
 
+## 0.0.15 - 2023-04-02
+
+Added code to strip a bunch of additional characters from the generated output file name:
+
+* Replace: two spaces with a space
+* Replace: ' – ' with a single space
+* Replace: ' - ' with a single sapce
+* Replace: single space with a dash
+* Replace: double dash with a single dash
+* Remove: double periods, commas, # and @
+
 ## 0.0.14 - 2023-03-19
 
 Added `directoryExists` function to `utils.js` and changed Clear to use it.
