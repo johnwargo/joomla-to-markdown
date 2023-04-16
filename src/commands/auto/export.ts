@@ -51,7 +51,7 @@ export default class AutoExport extends Command {
         
         if (debug) console.dir(configObject);
 
-        processExport(configObject, flags.debug, flags.shortDate)
+        processExport(configObject, flags.debug, flags.yearOnly)
           .then((processResult: ProcessResult) => {
             if (processResult.result) {
               resolve();
