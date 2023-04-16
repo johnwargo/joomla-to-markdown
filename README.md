@@ -238,7 +238,7 @@ Use `export` or `e` for this command.
 Flags:
 
 * `--debug` or `-d`: Sends additional content to the console as the module runs
-* `--shortDate` `-z`: Added to support [Eleventy](https://www.11ty.dev/) when exporting using a template file. Uses only the year (instead of the full date) in the file name and removes the timestamp from the frontmatter.
+* `--yearOnly` `-y`: Added to support [Eleventy](https://www.11ty.dev/) when exporting using a template file. Uses only the year (instead of the full date) in the file name and removes the timestamp from the front matter.
 
 When you've exported your Joomla site's content and you're ready to create markdown files start by creating a template file the module will use to format the exported markdown files. Since I knew I wanted to run this site on Jekyll (before migrating it to Eleventy), I grabbed the default first post from a new Jekyll site and modified it to use as a template for this module. A portion of the sample post is shown below.
 

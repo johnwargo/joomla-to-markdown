@@ -134,7 +134,7 @@ async function validateConfig(config: ConfigObject, debug: boolean): Promise<Pro
   return processResult;
 }
 
-export function processExport(config: ConfigObject, debug: boolean = false, shortDate: boolean = false): Promise<ProcessResult> {
+export function processExport(config: ConfigObject, debug: boolean = false, yearOnly: boolean = false): Promise<ProcessResult> {
 
   // var gmtOffset: number = 0;
   var replacements: RegExpMatchArray[] = [];
@@ -170,7 +170,7 @@ export function processExport(config: ConfigObject, debug: boolean = false, shor
             replacements = template.match(/\{\{([^}]+)\}\}/g);
             if (!replacements) {
               processResult.result = false;
-              processResult.message += `\nNo replacible tokens found in template file '${config.templateFileName}'.`;
+              processResult.message += `\nNo replaceable tokens found in template file '${config.templateFileName}'.`;
               reject(processResult);
             }
             console.dir(replacements);
@@ -219,7 +219,7 @@ export function processExport(config: ConfigObject, debug: boolean = false, shor
                   article.category_title = category ? category.title.replace(/:/g, '') : 'Unknown';
                   article.category_alias = category ? category.alias : 'unknown';
                   if (config.templateFileName) {
-                    exportTemplateArticle(article, template, replacements, outputFolder, debug, shortDate);
+                    exportTemplateArticle(article, template, replacements, outputFolder, debug, yearOnly);
                   } else {
                     exportGenericArticle(article, outputFolder, debug);
                   }
@@ -252,7 +252,7 @@ export function exportTemplateArticle(
   replacements: RegExpMatchArray[],
   outputFolder: string,
   debug: boolean,
-  shortDate: boolean) {
+  yearOnly: boolean) {
 
   var docBody: string;
 
@@ -271,7 +271,7 @@ export function exportTemplateArticle(
     // get the value of the property
     var propertyValue: any = article[propertyName as keyof Article]?.toString();
 
-    if (shortDate && propertyName === 'created') {
+    if (yearOnly && propertyName === 'created') {
       // Stripping time portion from Created?
       let tmpDate = new Date(propertyValue);
       propertyValue = `${tmpDate.getFullYear()}-${zeroPad(tmpDate.getMonth() + 1)}-${zeroPad(tmpDate.getDate())}`;
@@ -291,7 +291,7 @@ export function exportTemplateArticle(
   if (debug) console.dir(docBody);
 
   // Calculate the output file name  
-  var outputFileName = path.join(outputFolder, buildOutputFileName(article.title, article.created, debug, shortDate));
+  var outputFileName = path.join(outputFolder, buildOutputFileName(article.title, article.created, debug, yearOnly));
   console.log(`Writing file '${outputFileName}'`);
   // write the body to the file
   fs.writeFileSync(outputFileName, docBody, {});
@@ -339,7 +339,7 @@ function calculateOffsetString(offset: number, debug: boolean = false): string {
   return isNegative ? '-' + offsetValStr : offsetValStr;
 }
 
-function buildOutputFileName(title: string, articleDate: string, debug: boolean, shortDate: boolean): string {
+function buildOutputFileName(title: string, articleDate: string, debug: boolean, yearOnly: boolean): string {
   // replace spaces with dashes (kill extra spaces first)
   // Remove any #, @, or comma characters
   // Remove all repeating periods
@@ -359,7 +359,7 @@ function buildOutputFileName(title: string, articleDate: string, debug: boolean,
   // convert the date string into a Date/Time object
   var tempDate = parseJSON(articleDate);
   // build the file name
-  if (shortDate) {
+  if (yearOnly) {
     return `${tempDate.getFullYear()}-${tempTitle}.md`;
   } else {
     return `${tempDate.getFullYear()}-${zeroPad(tempDate.getMonth() + 1)}-${zeroPad(tempDate.getDate())}-${tempTitle}.md`;

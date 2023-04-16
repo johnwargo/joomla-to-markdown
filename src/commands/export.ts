@@ -23,7 +23,7 @@ export default class Export extends Command {
   static examples = [strings.fourParamExample]
   static flags = {
     debug: Flags.boolean({ char: 'd' }),
-    shortDate: Flags.boolean({ char: 'z' })
+    yearOnly: Flags.boolean({ char: 'y' })
   }
   static args = [
     {

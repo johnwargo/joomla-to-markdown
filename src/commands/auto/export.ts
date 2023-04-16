@@ -19,7 +19,7 @@ export default class AutoExport extends Command {
   static examples = ['<%= config.bin %> <%= command.id %>'];
   static flags = {
     debug: Flags.boolean({ char: 'd' }),
-    shortDate: Flags.boolean({ char: 'z' })
+    yeaOnly: Flags.boolean({ char: 'y' })
   }
   static args = [];
 
